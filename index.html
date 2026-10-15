@@ -150,7 +150,6 @@
 
         <!-- Container Daftar Item Ruang -->
         <div id="ruang-list-container" class="space-y-3 pt-2 border-t border-gray-200">
-          <!-- Item Ruang Pertama -->
           <div class="ruang-item bg-white p-3 rounded border border-gray-200 space-y-2 relative">
             <div class="flex justify-between items-center border-b pb-1">
               <span class="text-[11px] font-bold text-gray-700 item-title">Item Ruang #1</span>
@@ -247,18 +246,40 @@
           </div>
         </div>
 
+        <!-- Pilihan Opsi Pembayaran DP / Lunas & Nominal -->
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pembayaran DP (Rp)</label>
-            <input type="number" id="input-dp" oninput="updatePreview()" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300" />
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Tipe Awal Pembayaran</label>
+            <select id="select-tipe-awal" onchange="updatePreview()" class="w-full p-2 border rounded border-gray-300 bg-white text-xs">
+              <option value="DP">DP (Uang Muka)</option>
+              <option value="Lunas">Lunas</option>
+            </select>
           </div>
           <div>
-            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pelunasan 1 (Rp)</label>
-            <input type="number" id="input-pelunasan1" oninput="updatePreview()" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300" />
+            <label id="label-nominal-awal" class="block text-[11px] font-semibold text-gray-700 mb-1">Pembayaran DP (Rp)</label>
+            <input type="number" id="input-dp" oninput="updatePreview()" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300" />
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <!-- Column Pelunasan Dinamis (1, 2, 3) -->
+        <div class="space-y-2 pt-1 border-t border-amber-200/60">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pelunasan 1 (Rp)</label>
+            <input type="number" id="input-pelunasan1" oninput="checkPelunasanFields(); updatePreview();" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300" />
+          </div>
+
+          <div id="container-pelunasan2" class="hidden">
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pelunasan 2 (Rp)</label>
+            <input type="number" id="input-pelunasan2" oninput="checkPelunasanFields(); updatePreview();" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300 bg-amber-50/30" />
+          </div>
+
+          <div id="container-pelunasan3" class="hidden">
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pelunasan 3 (Rp)</label>
+            <input type="number" id="input-pelunasan3" oninput="updatePreview()" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300 bg-amber-50/30" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-amber-200/60">
           <div>
             <label class="block text-[11px] font-semibold text-gray-700 mb-1">Status Pembayaran (Otomatis)</label>
             <select id="select-status-bayar" disabled class="w-full p-2 border rounded border-gray-300 bg-gray-100 text-xs font-bold text-gray-700 cursor-not-allowed">
@@ -299,13 +320,11 @@
         <!-- Header Clean dengan Garis Kuning -->
         <div class="border-b-4 border-[#F5B850] pb-2 mb-6">
           <div class="flex justify-between items-start w-full">
-            <!-- Logo EXCO.png & Teks Lokasi -->
             <div class="flex flex-col items-start">
               <img src="EXCO.png" alt="EXCO Logo" class="h-24 w-auto object-contain" />
               <p id="prev-cabang" class="text-xs font-bold text-gray-700 tracking-wider uppercase ml-1 mt-1"></p>
             </div>
             
-            <!-- Sisi Kanan: INVOICE + Invoice Number -->
             <div class="flex flex-col items-end justify-center">
               <div class="flex items-center gap-3">
                 <h1 class="text-4xl font-extrabold text-gray-800 tracking-wider leading-none">INVOICE</h1>
@@ -360,19 +379,21 @@
           </tbody>
         </table>
 
-        <!-- Ringkasan Total Pembayaran -->
+        <!-- Ringkasan Total & Riwayat Pembayaran -->
         <div class="flex justify-end mb-6">
-          <div class="w-1/2 text-xs space-y-1.5 border-t pt-2">
-            <div class="flex justify-between font-bold text-gray-800">
+          <div class="w-1/2 text-xs space-y-1 border-t pt-2">
+            <div class="flex justify-between font-bold text-gray-800 pb-1">
               <span>Total</span>
               <span id="prev-total">Rp 0</span>
             </div>
-            <div class="flex justify-between text-gray-600">
-              <span id="prev-label-bayar">DP</span>
-              <span id="prev-dp-val">Rp 0</span>
+            
+            <!-- Dynamic List Pembayaran -->
+            <div id="prev-pembayaran-list" class="space-y-1 text-gray-600 border-t border-dashed pt-1">
+              <!-- Item DP/Pelunasan dirender via JS -->
             </div>
+
             <!-- Highlight Box Sisa Tagihan -->
-            <div class="bg-gray-100 border border-gray-300 rounded p-2 mt-1">
+            <div class="bg-gray-100 border border-gray-300 rounded p-2 mt-2">
               <div class="flex justify-between font-bold text-gray-900">
                 <span class="uppercase">SISA TAGIHAN</span>
                 <span id="prev-pelunasan" class="text-sm">Rp 0</span>
@@ -394,8 +415,6 @@
 
         <!-- Ketentuan Pemesanan & Pembatalan serta Fasilitas Office Excowork -->
         <div class="mt-6 pt-4 border-t border-gray-200 text-[11px] space-y-4">
-          
-          <!-- Ketentuan Pemesanan & Pembatalan -->
           <div class="bg-red-50/60 p-3 rounded-lg border border-red-100">
             <h4 class="font-bold text-red-900 mb-1.5 uppercase text-[11px] flex items-center gap-1">
               📌 Ketentuan Pemesanan & Pembatalan :
@@ -407,7 +426,6 @@
             </ul>
           </div>
 
-          <!-- Fasilitas Office Excowork -->
           <div class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100">
             <h4 class="font-bold text-emerald-900 mb-2 uppercase text-[11px] flex items-center gap-1">
               ✨ Fasilitas Office Excowork :
@@ -424,7 +442,6 @@
               <div class="col-span-2">☕ Pantry Self Service (air putih, teh, kopi)</div>
             </div>
           </div>
-
         </div>
 
       </div>
@@ -652,6 +669,31 @@
       });
     }
 
+    /* Logika Kemunculan Dinamis Input Pelunasan 2 & 3 */
+    function checkPelunasanFields() {
+      const p1 = parseFloat(document.getElementById('input-pelunasan1').value) || 0;
+      const container2 = document.getElementById('container-pelunasan2');
+      const p2 = parseFloat(document.getElementById('input-pelunasan2').value) || 0;
+      const container3 = document.getElementById('container-pelunasan3');
+
+      if (p1 > 0) {
+        container2.classList.remove('hidden');
+      } else {
+        container2.classList.add('hidden');
+        document.getElementById('input-pelunasan2').value = '';
+        container3.classList.add('hidden');
+        document.getElementById('input-pelunasan3').value = '';
+        return;
+      }
+
+      if (p2 > 0) {
+        container3.classList.remove('hidden');
+      } else {
+        container3.classList.add('hidden');
+        document.getElementById('input-pelunasan3').value = '';
+      }
+    }
+
     function formatRupiah(number) {
       return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
     }
@@ -702,11 +744,17 @@
       const end = document.getElementById('input-end').value.trim();
       const kode = document.getElementById('select-kode').value || "EXW";
 
-      // Status & Riwayat
+      // Status & Pembayaran
       const noUrut = document.getElementById('input-no-urut').value.trim() || "2003";
+      const tipeAwal = document.getElementById('select-tipe-awal').value;
       const dpVal = parseFloat(document.getElementById('input-dp').value) || 0;
       const pelunasan1Val = parseFloat(document.getElementById('input-pelunasan1').value) || 0;
+      const pelunasan2Val = parseFloat(document.getElementById('input-pelunasan2').value) || 0;
+      const pelunasan3Val = parseFloat(document.getElementById('input-pelunasan3').value) || 0;
       const metodeBayar = document.getElementById('select-metode-bayar').value;
+
+      // Label Tipe Awal Form
+      document.getElementById('label-nominal-awal').innerText = tipeAwal === 'Lunas' ? 'Pembayaran Lunas (Rp)' : 'Pembayaran DP (Rp)';
 
       // Catatan
       const noteVal = document.getElementById('input-note').value.trim();
@@ -814,7 +862,7 @@
       });
 
       // Hitung Total Masuk & Status Otomatis
-      const totalBayar = dpVal + pelunasan1Val;
+      const totalBayar = dpVal + pelunasan1Val + pelunasan2Val + pelunasan3Val;
       let statusPembayaran = "Unpaid";
 
       if (grandTotal > 0 && totalBayar >= grandTotal) {
@@ -829,26 +877,63 @@
       const selectStatusElem = document.getElementById('select-status-bayar');
       selectStatusElem.value = statusPembayaran;
 
-      // Update Badge Status Pembayaran & Label Ringkasan
+      // Update Badge Status Pembayaran
       const badgeElem = document.getElementById('prev-badge-status');
-      const labelBayarElem = document.getElementById('prev-label-bayar');
-      const valBayarElem = document.getElementById('prev-dp-val');
-
       if (statusPembayaran === 'Paid') {
         badgeElem.innerText = 'PAID';
         badgeElem.className = 'bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
-        labelBayarElem.innerText = 'Telah Dibayarkan';
-        valBayarElem.innerText = formatRupiah(totalBayar);
       } else if (statusPembayaran === 'DP') {
         badgeElem.innerText = 'DP';
         badgeElem.className = 'bg-amber-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
-        labelBayarElem.innerText = 'DP';
-        valBayarElem.innerText = formatRupiah(dpVal);
       } else {
         badgeElem.innerText = 'UNPAID';
         badgeElem.className = 'bg-red-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
-        labelBayarElem.innerText = 'DP';
-        valBayarElem.innerText = formatRupiah(0);
+      }
+
+      // Render List Riwayat Pembayaran di Preview
+      const bayarListContainer = document.getElementById('prev-pembayaran-list');
+      bayarListContainer.innerHTML = '';
+
+      if (statusPembayaran === 'Paid' && dpVal === 0 && pelunasan1Val === 0) {
+        bayarListContainer.innerHTML = `
+          <div class="flex justify-between">
+            <span>Telah Dibayarkan</span>
+            <span>${formatRupiah(grandTotal)}</span>
+          </div>
+        `;
+      } else {
+        const labelPembayaranAwal = tipeAwal === 'Lunas' ? 'Telah Dibayarkan' : 'DP';
+        bayarListContainer.innerHTML += `
+          <div class="flex justify-between">
+            <span>${labelPembayaranAwal}</span>
+            <span>${formatRupiah(dpVal)}</span>
+          </div>
+        `;
+
+        if (pelunasan1Val > 0) {
+          bayarListContainer.innerHTML += `
+            <div class="flex justify-between">
+              <span>Pelunasan 1</span>
+              <span>${formatRupiah(pelunasan1Val)}</span>
+            </div>
+          `;
+        }
+        if (pelunasan2Val > 0) {
+          bayarListContainer.innerHTML += `
+            <div class="flex justify-between">
+              <span>Pelunasan 2</span>
+              <span>${formatRupiah(pelunasan2Val)}</span>
+            </div>
+          `;
+        }
+        if (pelunasan3Val > 0) {
+          bayarListContainer.innerHTML += `
+            <div class="flex justify-between">
+              <span>Pelunasan 3</span>
+              <span>${formatRupiah(pelunasan3Val)}</span>
+            </div>
+          `;
+        }
       }
 
       // Hitung Sisa Pelunasan / Sisa Tagihan
