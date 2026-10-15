@@ -260,11 +260,11 @@
 
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Status Pembayaran</label>
-            <select id="select-status-bayar" onchange="updatePreview()" class="w-full p-2 border rounded border-gray-300 bg-white text-xs">
-              <option value="Lunas">Lunas</option>
-              <option value="Belum Bayar">Belum Bayar</option>
-              <option value="Lunas DP">Lunas DP</option>
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Status Pembayaran (Otomatis)</label>
+            <select id="select-status-bayar" disabled class="w-full p-2 border rounded border-gray-300 bg-gray-100 text-xs font-bold text-gray-700 cursor-not-allowed">
+              <option value="Unpaid">Unpaid</option>
+              <option value="DP">DP</option>
+              <option value="Paid">Paid</option>
             </select>
           </div>
           <div>
@@ -309,8 +309,8 @@
             <div class="flex flex-col items-end justify-center">
               <div class="flex items-center gap-3">
                 <h1 class="text-4xl font-extrabold text-gray-800 tracking-wider leading-none">INVOICE</h1>
-                <span id="prev-badge-status" class="bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm">
-                  PAID
+                <span id="prev-badge-status" class="bg-red-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm">
+                  UNPAID
                 </span>
               </div>
               <div class="bg-gray-50 border-l-4 border-[#F5B850] px-3 py-1 text-xs mt-3">
@@ -703,7 +703,6 @@
       const noUrut = document.getElementById('input-no-urut').value.trim() || "2003";
       const dpVal = parseFloat(document.getElementById('input-dp').value) || 0;
       const pelunasan1Val = parseFloat(document.getElementById('input-pelunasan1').value) || 0;
-      const statusBayar = document.getElementById('select-status-bayar').value;
       const metodeBayar = document.getElementById('select-metode-bayar').value;
 
       // Catatan
@@ -716,19 +715,6 @@
       const suffixInvStr = `/${kode}/${monthStr}${yearStr}`;
       document.getElementById('suffix-inv').innerText = suffixInvStr;
       document.getElementById('prev-inv').innerText = `INV-${noUrut}${suffixInvStr}`;
-
-      // Badge Status Pembayaran
-      const badgeElem = document.getElementById('prev-badge-status');
-      if (statusBayar === 'Lunas') {
-        badgeElem.innerText = 'PAID';
-        badgeElem.className = 'bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
-      } else if (statusBayar === 'Belum Bayar') {
-        badgeElem.innerText = 'UNPAID';
-        badgeElem.className = 'bg-red-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
-      } else {
-        badgeElem.innerText = 'DP LUNAS';
-        badgeElem.className = 'bg-amber-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
-      }
 
       // Info Penerima & Kontak
       document.getElementById('prev-nama').innerText = nama ? nama : "-";
@@ -824,8 +810,37 @@
         tbody.appendChild(tr);
       });
 
+      // Hitung Total Masuk & Status Otomatis
+      const totalBayar = dpVal + pelunasan1Val;
+      let statusPembayaran = "Unpaid";
+
+      if (grandTotal > 0 && totalBayar >= grandTotal) {
+        statusPembayaran = "Paid";
+      } else if (totalBayar > 0 && totalBayar < grandTotal) {
+        statusPembayaran = "DP";
+      } else {
+        statusPembayaran = "Unpaid";
+      }
+
+      // Update Form Status Dropdown
+      const selectStatusElem = document.getElementById('select-status-bayar');
+      selectStatusElem.value = statusPembayaran;
+
+      // Update Badge Status Pembayaran di Preview Invoice
+      const badgeElem = document.getElementById('prev-badge-status');
+      if (statusPembayaran === 'Paid') {
+        badgeElem.innerText = 'PAID';
+        badgeElem.className = 'bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+      } else if (statusPembayaran === 'DP') {
+        badgeElem.innerText = 'DP';
+        badgeElem.className = 'bg-amber-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+      } else {
+        badgeElem.innerText = 'UNPAID';
+        badgeElem.className = 'bg-red-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+      }
+
       // Hitung Sisa Pelunasan / Amount Due
-      const totalSisa = Math.max(0, grandTotal - dpVal - pelunasan1Val);
+      const totalSisa = Math.max(0, grandTotal - totalBayar);
 
       document.getElementById('prev-total').innerText = formatRupiah(grandTotal);
       document.getElementById('prev-dp-val').innerText = formatRupiah(dpVal);
