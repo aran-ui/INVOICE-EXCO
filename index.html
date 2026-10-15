@@ -234,11 +234,10 @@
         </div>
       </div>
 
-      <!-- ==================== STATUS & RIWAYAT PEMBAYARAN ==================== -->
+      <!-- STATUS & RIWAYAT PEMBAYARAN -->
       <div class="border border-amber-200 bg-amber-50/50 p-4 rounded-xl space-y-3">
         <h3 class="text-xs font-bold text-amber-900 tracking-wide uppercase">STATUS & RIWAYAT PEMBAYARAN</h3>
         
-        <!-- No Urut Invoice -->
         <div>
           <label class="block text-[11px] font-semibold text-gray-700 mb-1">No. Urut Invoice Manual / Otomatis</label>
           <div class="flex items-center">
@@ -248,7 +247,6 @@
           </div>
         </div>
 
-        <!-- Nominal DP & Pelunasan 1 -->
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pembayaran DP (Rp)</label>
@@ -260,7 +258,6 @@
           </div>
         </div>
 
-        <!-- Status & Metode Pembayaran -->
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[11px] font-semibold text-gray-700 mb-1">Status Pembayaran</label>
@@ -283,7 +280,7 @@
         </div>
       </div>
 
-      <!-- ==================== CATATAN KHUSUS / NOTE ==================== -->
+      <!-- CATATAN KHUSUS / NOTE -->
       <div class="border border-gray-200 bg-gray-50/60 p-4 rounded-xl space-y-2">
         <h3 class="text-xs font-bold text-gray-700 tracking-wide uppercase">CATATAN KHUSUS / NOTE (OPSIONAL)</h3>
         <input type="text" id="input-note" oninput="updatePreview()" placeholder="Contoh: Sewa extra bed tanpa sewa kamar" class="w-full text-xs p-2 border rounded border-gray-300 bg-white" />
@@ -392,19 +389,39 @@
           <p><strong class="font-semibold text-amber-900">CATATAN :</strong> <span id="prev-note-text" class="text-amber-800"></span></p>
         </div>
 
-        <!-- Tanda Tangan -->
-        <div class="flex justify-between items-end text-xs pt-4">
-          <div class="text-gray-500 italic">
-            <p id="prev-lokasi-tgl">Kediri, 12 Oktober 2026</p>
-            <p class="font-bold not-italic text-gray-700">PT. Aran Ruangan Kerja</p>
+        <!-- Ketentuan Pemesanan & Pembatalan serta Fasilitas Office Excowork -->
+        <div class="mt-6 pt-4 border-t border-gray-200 text-[11px] space-y-4">
+          
+          <!-- Ketentuan Pemesanan & Pembatalan -->
+          <div class="bg-red-50/60 p-3 rounded-lg border border-red-100">
+            <h4 class="font-bold text-red-900 mb-1.5 uppercase text-[11px] flex items-center gap-1">
+              📌 Ketentuan Pemesanan & Pembatalan :
+            </h4>
+            <ul class="list-disc list-inside text-gray-700 space-y-0.5 ml-1">
+              <li>Pemesanan wajib melakukan DP sesuai ketentuan.</li>
+              <li>Pembatalan di hari H, DP hangus.</li>
+              <li>Jika sudah lunas, refund tidak 100%.</li>
+            </ul>
           </div>
-          <div class="text-center relative pr-4">
-            <div class="w-32 h-20 border border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 mb-1">
-              [Stempel & TTD]
+
+          <!-- Fasilitas Office Excowork -->
+          <div class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100">
+            <h4 class="font-bold text-emerald-900 mb-2 uppercase text-[11px] flex items-center gap-1">
+              ✨ Fasilitas Office Excowork :
+            </h4>
+            <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-gray-700 font-medium">
+              <div>⚡ Sudah termasuk biaya listrik</div>
+              <div>🕌 Mushola</div>
+              <div>🛜 Koneksi WiFi</div>
+              <div>🚻 Kamar mandi</div>
+              <div>🔌 Ada colokan di setiap meja</div>
+              <div>🅿️ Parkir Luas</div>
+              <div>⚡ Listrik aman (ada genset)</div>
+              <div>🚭 No Smoking Area 🚭</div>
+              <div class="col-span-2">☕ Pantry Self Service (air putih, teh, kopi)</div>
             </div>
-            <p id="prev-nama-ttd" class="font-bold underline uppercase text-gray-800">UDIN PRADANA</p>
-            <p class="text-[10px] text-gray-500 uppercase tracking-wider">MANAJER</p>
           </div>
+
         </div>
 
       </div>
@@ -692,7 +709,7 @@
       // Catatan
       const noteVal = document.getElementById('input-note').value.trim();
 
-      // Tanggal & Bulan untuk Suffix Invoice (misal: 1026 untuk Okt 2026)
+      // Tanggal & Bulan untuk Suffix Invoice
       const now = new Date();
       const monthStr = String(now.getMonth() + 1).padStart(2, '0');
       const yearStr = String(now.getFullYear()).slice(-2);
