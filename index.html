@@ -151,11 +151,11 @@
         <!-- Container Daftar Item Ruang -->
         <div id="ruang-list-container" class="space-y-3 pt-2 border-t border-gray-200">
           <!-- Item Ruang Pertama -->
-          <div class="ruang-item bg-white p-3 rounded border border-gray-200 space-y-2 relative" data-index="0">
+          <div class="ruang-item bg-white p-3 rounded border border-gray-200 space-y-2 relative">
             <div class="flex justify-between items-center border-b pb-1">
-              <span class="text-[11px] font-bold text-gray-700">Item Ruang #1</span>
+              <span class="text-[11px] font-bold text-gray-700 item-title">Item Ruang #1</span>
+              <button type="button" onclick="hapusRuangItem(this)" class="text-red-500 hover:text-red-700 font-bold text-xs">🗑️ Hapus</button>
             </div>
-
             <div>
               <label class="block text-[10px] text-gray-600 mb-0.5">Pilih Ruang *</label>
               <select onchange="handleRuangChange(this)" class="select-ruang w-full p-1.5 text-xs border rounded border-gray-300 bg-white">
@@ -184,7 +184,6 @@
               </select>
               <input type="text" oninput="updatePreview()" placeholder="Ketik nama ruang manual" class="input-ruang-manual hidden mt-1 w-full text-xs p-1.5 border border-amber-300 rounded bg-amber-50/50" />
             </div>
-
             <div class="grid grid-cols-2 gap-2">
               <div>
                 <label class="block text-[10px] text-gray-600 mb-0.5">Harga Rate (Rp)</label>
@@ -195,7 +194,6 @@
                 <input type="number" oninput="updatePreview()" placeholder="Opsional (misal 25000)" class="input-diskon w-full text-xs p-1.5 border rounded border-gray-300" />
               </div>
             </div>
-
             <div class="grid grid-cols-2 gap-2">
               <div>
                 <label class="block text-[10px] text-gray-600 mb-0.5">Durasi</label>
@@ -220,7 +218,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- Tombol Simpan -->
@@ -241,7 +238,7 @@
               <img src="EXCO.png" alt="EXCO Logo" class="h-24 w-auto object-contain" />
               <p id="prev-cabang" class="text-xs font-bold text-gray-700 tracking-wider uppercase ml-1 mt-1"></p>
             </div>
-
+            
             <!-- Sisi Kanan: INVOICE + Invoice Number -->
             <div class="flex flex-col items-end justify-center">
               <div class="flex items-center gap-3">
@@ -272,7 +269,6 @@
               <span>Start <strong id="prev-start">-</strong></span>
               <span>End <strong id="prev-end">-</strong></span>
             </div>
-            
             <div class="pt-2 flex justify-end">
               <div class="border border-gray-300 bg-gray-50 rounded px-3 py-1.5 inline-block text-right shadow-sm">
                 <span class="font-semibold text-gray-600 text-xs">Amount Due :</span>
@@ -336,6 +332,7 @@
             <p class="text-[10px] text-gray-500 uppercase tracking-wider">MANAJER</p>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -343,8 +340,6 @@
 
   <!-- JavaScript Interaktivitas & Cetak -->
   <script>
-    let ruangCount = 1;
-
     function updateKodePenerbit() {
       const penerbitVal = document.getElementById('select-penerbit').value;
       document.getElementById('select-kode').value = penerbitVal;
@@ -362,16 +357,32 @@
       updatePreview();
     }
 
+    function renumerasiItemRuang() {
+      const ruangItems = document.querySelectorAll('.ruang-item');
+      ruangItems.forEach((item, index) => {
+        const title = item.querySelector('.item-title');
+        if (title) {
+          title.innerText = `Item Ruang #${index + 1}`;
+        }
+      });
+    }
+
+    function hapusRuangItem(btn) {
+      const item = btn.closest('.ruang-item');
+      item.remove();
+      renumerasiItemRuang();
+      updatePreview();
+    }
+
     function tambahRuangItem() {
-      ruangCount++;
       const container = document.getElementById('ruang-list-container');
+      const nextIndex = container.querySelectorAll('.ruang-item').length + 1;
+      
       const newItem = document.createElement('div');
       newItem.className = 'ruang-item bg-white p-3 rounded border border-gray-200 space-y-2 relative';
-      newItem.setAttribute('data-index', ruangCount - 1);
-      
       newItem.innerHTML = `
         <div class="flex justify-between items-center border-b pb-1">
-          <span class="text-[11px] font-bold text-gray-700">Item Ruang #${ruangCount}</span>
+          <span class="text-[11px] font-bold text-gray-700 item-title">Item Ruang #${nextIndex}</span>
           <button type="button" onclick="hapusRuangItem(this)" class="text-red-500 hover:text-red-700 font-bold text-xs">🗑️ Hapus</button>
         </div>
         <div>
@@ -436,12 +447,7 @@
         </div>
       `;
       container.appendChild(newItem);
-      updatePreview();
-    }
-
-    function hapusRuangItem(btn) {
-      const item = btn.closest('.ruang-item');
-      item.remove();
+      renumerasiItemRuang();
       updatePreview();
     }
 
@@ -475,7 +481,6 @@
       const wa = document.getElementById('input-wa').value.trim();
       const email = document.getElementById('input-email').value.trim();
       const cabang = document.getElementById('select-cabang').value;
-      
       const booking = document.getElementById('input-booking').value;
       const due = document.getElementById('input-due').value;
       const start = document.getElementById('input-start').value.trim();
@@ -483,7 +488,7 @@
 
       // Header & Informasi Tamu
       document.getElementById('prev-nama').innerText = nama ? nama : "-";
-
+      
       let kontakArr = [];
       if (wa) kontakArr.push(wa);
       if (email) kontakArr.push(email);
@@ -498,10 +503,9 @@
       // Render Baris Tabel Ruang
       const tbody = document.getElementById('invoice-tbody');
       tbody.innerHTML = '';
-
       let grandTotal = 0;
-      const ruangItems = document.querySelectorAll('.ruang-item');
 
+      const ruangItems = document.querySelectorAll('.ruang-item');
       ruangItems.forEach(item => {
         const selectRuang = item.querySelector('.select-ruang').value;
         const manualRuang = item.querySelector('.input-ruang-manual').value.trim();
@@ -510,7 +514,7 @@
         const durasiVal = item.querySelector('.select-durasi').value || '-';
         const qtyVal = parseInt(item.querySelector('.input-qty').value) || 1;
 
-        // Tentukan Nama Ruang (Jika belum dipilih, tampilkan "-")
+        // Tentukan Nama Ruang
         let namaRuang = "-";
         if (selectRuang === 'Lainnya') {
           namaRuang = manualRuang ? manualRuang : "-";
@@ -523,7 +527,7 @@
         const amountRow = hargaSetelDiskon * qtyVal;
         grandTotal += amountRow;
 
-        // Visualisasi Kolom Rate (Menampilkan Coret jika ada Diskon)
+        // Visualisasi Kolom Rate
         let rateHTML = formatRupiah(rateVal);
         if (diskonVal > 0 && rateVal > 0) {
           rateHTML = `<span class="line-through text-gray-400 text-[10px] block">${formatRupiah(rateVal)}</span>` +
