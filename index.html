@@ -52,7 +52,7 @@
       </div>
 
       <!-- Penerbit Invoice -->
-      <div class="border border-yellow-200 bg-yellow-50/30 p-3 rounded-lg space-y-2">
+      <div class="border border-yellow-200 bg-yellow-50/30 p-3 rounded-lg space-y-3">
         <label class="block text-xs font-bold text-amber-900 uppercase">👤 Penerbit Invoice</label>
         <div class="grid grid-cols-2 gap-2 text-xs">
           <div>
@@ -87,6 +87,16 @@
               <option value="DIY">DIY</option>
             </select>
           </div>
+        </div>
+
+        <!-- Dropdown Cabang / Lokasi -->
+        <div class="text-xs pt-1 border-t border-yellow-200/60">
+          <label class="block text-[11px] text-gray-600 mb-1">Cabang / Lokasi *</label>
+          <select id="select-cabang" onchange="updatePreview()" class="w-full p-2 border rounded border-gray-300 bg-white">
+            <option value="">-- Pilih Cabang --</option>
+            <option value="Pare">Pare</option>
+            <option value="Jogja">Jogja</option>
+          </select>
         </div>
       </div>
 
@@ -139,10 +149,12 @@
         
         <!-- Header Clean dengan Garis Kuning -->
         <div class="border-b-4 border-[#F5B850] pb-2 mb-6">
-          <div class="flex justify-between items-center w-full">
-            <!-- Logo EXCO.png -->
-            <div class="flex items-center">
-              <img src="EXCO.png" alt="EXCO Logo" class="h-28 w-auto object-contain" />
+          <div class="flex justify-between items-start w-full">
+            <!-- Logo EXCO.png & Teks Cabang di Bawahnya -->
+            <div class="flex flex-col items-start">
+              <img src="EXCO.png" alt="EXCO Logo" class="h-24 w-auto object-contain" />
+              <!-- Teks Cabang Tepat di Bawah Logo -->
+              <p id="prev-cabang" class="text-xs font-bold text-gray-600 tracking-wider uppercase ml-1 mt-1"></p>
             </div>
 
             <!-- Sisi Kanan: INVOICE + Invoice Number -->
@@ -262,6 +274,7 @@
       const nama = document.getElementById('input-nama').value.trim();
       const wa = document.getElementById('input-wa').value.trim();
       const email = document.getElementById('input-email').value.trim();
+      const cabang = document.getElementById('select-cabang').value;
 
       // Jika nama kosong, set default "-"
       document.getElementById('prev-nama').innerText = nama ? nama : "-";
@@ -270,8 +283,10 @@
       let kontakArr = [];
       if (wa) kontakArr.push(wa);
       if (email) kontakArr.push(email);
-
       document.getElementById('prev-kontak').innerText = kontakArr.join(" - ");
+
+      // Update Teks Cabang di Bawah Logo EXCO
+      document.getElementById('prev-cabang').innerText = cabang ? "CABANG " + cabang.toUpperCase() : "";
     }
 
     function downloadPDF() {
