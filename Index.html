@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invoice Generator - ExCowork</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- html2pdf.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.min.js"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff !important; padding: 0 !important; }
+    }
+    .invoice-card {
+      width: 210mm;
+      min-height: 297mm;
+      padding: 15mm;
+      margin: auto;
+      background: white;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans p-4">
+
+  <!-- Tombol Aksi (Tidak Ikut Tercetak) -->
+  <div class="max-w-[210mm] mx-auto mb-4 flex justify-between items-center no-print bg-white p-4 rounded shadow">
+    <h1 class="font-bold text-lg text-gray-700">Invoice ExCowork Generator</h1>
+    <button onclick="downloadPDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded shadow transition">
+      Download PDF
+    </button>
+  </div>
+
+  <!-- Layout Utama Invoice -->
+  <div id="invoice" class="invoice-card shadow-lg rounded border border-gray-200">
+    
+    <!-- Header Logo & Branding -->
+    <div class="flex justify-between items-start border-b pb-4 mb-4">
+      <div>
+        <h2 class="text-xl font-bold tracking-wide text-emerald-800">@EXCOWORK</h2>
+        <div class="mt-2 text-xs text-gray-600">
+          <p class="font-semibold text-gray-700">Billed To :</p>
+          <input type="text" value="Eko Dwi" class="font-medium text-gray-800 border-b border-dashed border-gray-400 focus:outline-none w-48" />
+        </div>
+      </div>
+
+      <div class="text-right">
+        <h1 class="text-2xl font-black text-gray-800 tracking-wider">INVOICE</h1>
+        <div class="mt-2 text-xs space-y-1">
+          <p><span class="font-semibold">Invoice Number :</span> <input type="text" value="INV-2333/EXW/1026" class="border-b border-dashed border-gray-400 text-right focus:outline-none w-36" /></p>
+          <p><span class="font-semibold">Due Date :</span> <input type="text" value="13 Oktober 2026" class="border-b border-dashed border-gray-400 text-right focus:outline-none w-32" /></p>
+          <p><span class="font-semibold">Booking Date :</span> <input type="text" value="12 Oktober 2026" class="border-b border-dashed border-gray-400 text-right focus:outline-none w-32" /></p>
+          <div class="flex justify-end gap-2 pt-1 text-gray-600">
+            <span>Start <input type="text" value="12.00" class="w-12 text-center border-b border-dashed border-gray-400 focus:outline-none" /></span>
+            <span>End <input type="text" value="19.00" class="w-12 text-center border-b border-dashed border-gray-400 focus:outline-none" /></span>
+          </div>
+        </div>
+        <!-- Status Badge -->
+        <div class="mt-3 flex justify-end items-center gap-3">
+          <span class="bg-emerald-600 text-white font-bold text-xs px-3 py-1 rounded">PAID</span>
+          <span class="text-xs font-semibold text-gray-600">Ammount Due <strong class="text-gray-900 ml-1">Rp 0</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabel Layanan / Item Utama -->
+    <table class="w-full text-xs text-left mb-4 border-collapse">
+      <thead>
+        <tr class="border-b-2 border-gray-300 font-bold uppercase text-gray-700">
+          <th class="py-2">DESCRIPTION</th>
+          <th class="py-2 text-right">RATE</th>
+          <th class="py-2 text-center">DURATION</th>
+          <th class="py-2 text-center">QTY</th>
+          <th class="py-2 text-right">AMMOUNT</th>
+        </tr>
+      </thead>
+      <tbody id="item-list" class="divide-y divide-gray-200">
+        <tr>
+          <td class="py-2">Meeting 8 kursi</td>
+          <td class="py-2 text-right">Rp175.000</td>
+          <td class="py-2 text-center">8 Jam</td>
+          <td class="py-2 text-center">1</td>
+          <td class="py-2 text-right">Rp 175.000</td>
+        </tr>
+        <tr>
+          <td class="py-2">Meeting 8 kursi</td>
+          <td class="py-2 text-right">Rp100.000</td>
+          <td class="py-2 text-center">2 Jam</td>
+          <td class="py-2 text-center">1</td>
+          <td class="py-2 text-right">Rp 100.000</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Additional Items -->
+    <div class="mb-4">
+      <p class="text-xs font-bold text-gray-600 uppercase border-b pb-1 mb-2">ADDITIONAL</p>
+      <table class="w-full text-xs text-left border-collapse">
+        <tbody class="divide-y divide-gray-100">
+          <tr>
+            <td class="py-1">Smart TV</td>
+            <td class="py-1 text-right">Rp15.000</td>
+            <td class="py-1 text-center">4 Jam</td>
+            <td class="py-1 text-center">2</td>
+            <td class="py-1 text-right">Rp 30.000</td>
+          </tr>
+          <tr>
+            <td class="py-1">Smart TV</td>
+            <td class="py-1 text-right">Rp15.000</td>
+            <td class="py-1 text-center">3 Jam</td>
+            <td class="py-1 text-center">1</td>
+            <td class="py-1 text-right">Rp 15.000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Ringkasan Total Pembayaran -->
+    <div class="flex justify-end mb-6">
+      <div class="w-1/2 text-xs space-y-1 border-t pt-2">
+        <div class="flex justify-between font-bold">
+          <span>Total</span>
+          <span>Rp 320.000</span>
+        </div>
+        <div class="flex justify-between text-gray-600">
+          <span>DP</span>
+          <span>Rp 20.000</span>
+        </div>
+        <div class="flex justify-between font-bold text-gray-800 border-t pt-1">
+          <span>PELUNASAN</span>
+          <span>Rp 300.000</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terbilang & Info Pembayaran -->
+    <div class="text-xs space-y-2 mb-6 bg-gray-50 p-3 rounded">
+      <p><strong class="font-semibold text-gray-700">TERBILANG :</strong> <span class="italic font-medium">Tiga Ratus Tiga Puluh Ribu Rupiah</span></p>
+      <p><strong class="font-semibold text-gray-700">PEMBAYARAN :</strong> Mandiri / Aran Ruangan Kerja / 171-05-00004-000</p>
+    </div>
+
+    <!-- Note & Syarat Ketentuan -->
+    <div class="text-[10px] text-gray-600 space-y-2 mb-8 border-t pt-3">
+      <p class="font-bold uppercase text-gray-700">NOTE</p>
+      <p class="font-semibold">Ketentuan Pemesanan & Pembatalan :</p>
+      <ul class="list-disc list-inside space-y-0.5">
+        <li>Pemesanan wajib melakukan DP sesuai ketentuan.</li>
+        <li>Pembatalan di hari H, DP hangus.</li>
+        <li>Jika sudah lunas, refund tidak 100%.</li>
+      </ul>
+      <p class="font-semibold pt-1">Fasilitas Office Excowork :</p>
+      <p class="leading-relaxed">
+        Sudah termasuk biaya listrik | Koneksi WiFi | Mushola | Kamar mandi | Ada colokan di setiap meja | Listrik aman (ada genset) | Parkir Luas | No Smoking Area | Pantry Self Service (air putih, teh, kopi)
+      </p>
+    </div>
+
+    <!-- Tanda Tangan & Cap Stempel -->
+    <div class="flex justify-between items-end text-xs pt-4">
+      <div class="text-gray-500 italic">
+        <p>Kediri, 12 Oktober 2026</p>
+        <p class="font-bold not-italic text-gray-700">PT. Aran Ruangan Kerja</p>
+      </div>
+      <div class="text-center relative pr-4">
+        <!-- Area Stempel / Tanda Tangan -->
+        <div class="w-32 h-20 border border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 mb-1">
+          [Stempel & TTD]
+        </div>
+        <p class="font-bold underline uppercase text-gray-800">UDIN PRADANA</p>
+        <p class="text-[10px] text-gray-500 uppercase tracking-wider">MANAJER</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Script Cetak PDF -->
+  <script>
+    function downloadPDF() {
+      const element = document.getElementById('invoice');
+      const opt = {
+        margin:       5,
+        filename:     'Invoice-ExCowork.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
+</body>
+</html>
