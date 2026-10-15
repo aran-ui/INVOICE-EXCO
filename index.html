@@ -467,6 +467,18 @@
     }
 
     /* ================= LOGIKA EXTRA SERVICE ================= */
+    function handleExtraChange(selectElem) {
+      const container = selectElem.closest('.extra-service-item');
+      const manualInput = container.querySelector('.input-extra-manual');
+      if (selectElem.value === 'Lainnya') {
+        manualInput.classList.remove('hidden');
+      } else {
+        manualInput.classList.add('hidden');
+        manualInput.value = '';
+      }
+      updatePreview();
+    }
+
     function tambahExtraService() {
       const container = document.getElementById('extra-service-container');
       const emptyMsg = document.getElementById('empty-extra-msg');
@@ -482,10 +494,22 @@
           <button type="button" onclick="hapusExtraService(this)" class="text-red-500 hover:text-red-700 font-bold text-xs">🗑️ Hapus</button>
         </div>
         <div>
-          <label class="block text-[10px] text-gray-600 mb-0.5">Nama Layanan / Barang *</label>
-          <input type="text" oninput="updatePreview()" placeholder="Misal: Proyektor / Snack / Cetak Dokumen" class="input-extra-nama w-full text-xs p-1.5 border rounded border-gray-300" />
+          <label class="block text-[10px] text-gray-600 mb-0.5">Pilih Layanan / Barang *</label>
+          <select onchange="handleExtraChange(this)" class="select-extra-nama w-full p-1.5 text-xs border rounded border-gray-300 bg-white">
+            <option value="">-- Pilih Layanan / Barang --</option>
+            <option value="Smart TV">Smart TV</option>
+            <option value="Kursi">Kursi</option>
+            <option value="UP Wifi">UP Wifi</option>
+            <option value="Tripod">Tripod</option>
+            <option value="Headphone">Headphone</option>
+            <option value="Proyektor">Proyektor</option>
+            <option value="Room">Room</option>
+            <option value="Sign Logo">Sign Logo</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+          <input type="text" oninput="updatePreview()" placeholder="Ketik nama layanan manual" class="input-extra-manual hidden mt-1 w-full text-xs p-1.5 border border-amber-300 rounded bg-amber-50/50" />
         </div>
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[10px] text-gray-600 mb-0.5">Harga Rate (Rp)</label>
             <input type="number" oninput="updatePreview()" placeholder="50000" class="input-extra-rate w-full text-xs p-1.5 border rounded border-gray-300" />
@@ -493,6 +517,24 @@
           <div>
             <label class="block text-[10px] text-gray-600 mb-0.5">Diskon (Rp)</label>
             <input type="number" oninput="updatePreview()" placeholder="0" class="input-extra-diskon w-full text-xs p-1.5 border rounded border-gray-300" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] text-gray-600 mb-0.5">Durasi</label>
+            <select onchange="updatePreview()" class="select-extra-durasi w-full p-1.5 text-xs border rounded border-gray-300 bg-white">
+              <option value="">-- Pilih Durasi --</option>
+              <option value="1 Jam">1 Jam</option>
+              <option value="2 Jam">2 Jam</option>
+              <option value="3 Jam">3 Jam</option>
+              <option value="4 Jam">4 Jam</option>
+              <option value="5 Jam">5 Jam</option>
+              <option value="6 Jam">6 Jam</option>
+              <option value="8 Jam">8 Jam</option>
+              <option value="1 Hari">1 Hari</option>
+              <option value="1 Bulan">1 Bulan</option>
+              <option value="1 Tahun">1 Tahun</option>
+            </select>
           </div>
           <div>
             <label class="block text-[10px] text-gray-600 mb-0.5">Qty</label>
@@ -625,10 +667,19 @@
       // 2. Render Item Extra Service
       const extraItems = document.querySelectorAll('.extra-service-item');
       extraItems.forEach(item => {
-        const namaExtra = item.querySelector('.input-extra-nama').value.trim() || "-";
+        const selectExtra = item.querySelector('.select-extra-nama').value;
+        const manualExtra = item.querySelector('.input-extra-manual').value.trim();
         const rateVal = parseFloat(item.querySelector('.input-extra-rate').value) || 0;
         const diskonVal = parseFloat(item.querySelector('.input-extra-diskon').value) || 0;
+        const durasiVal = item.querySelector('.select-extra-durasi').value || '-';
         const qtyVal = parseInt(item.querySelector('.input-extra-qty').value) || 1;
+
+        let namaExtra = "-";
+        if (selectExtra === 'Lainnya') {
+          namaExtra = manualExtra ? manualExtra : "-";
+        } else if (selectExtra) {
+          namaExtra = selectExtra;
+        }
 
         const hargaSetelDiskon = diskonVal > 0 ? Math.max(0, rateVal - diskonVal) : rateVal;
         const amountRow = hargaSetelDiskon * qtyVal;
@@ -644,7 +695,7 @@
         tr.innerHTML = `
           <td class="py-2 font-medium text-blue-900">${namaExtra} <span class="text-[10px] text-blue-600 italic block">(Extra Service)</span></td>
           <td class="py-2 text-right">${rateVal > 0 ? rateHTML : '-'}</td>
-          <td class="py-2 text-center">-</td>
+          <td class="py-2 text-center">${durasiVal}</td>
           <td class="py-2 text-center">${qtyVal}</td>
           <td class="py-2 text-right font-semibold">${amountRow > 0 ? formatRupiah(amountRow) : '-'}</td>
         `;
