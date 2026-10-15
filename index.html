@@ -57,25 +57,34 @@
         <div class="grid grid-cols-2 gap-2 text-xs">
           <div>
             <label class="block text-[11px] text-gray-600 mb-1">Nama Penerbit *</label>
-            <select class="w-full p-2 border rounded border-gray-300 bg-white">
+            <select id="select-penerbit" onchange="updateKodePenerbit()" class="w-full p-2 border rounded border-gray-300 bg-white">
               <option value="">-- Pilih Penerbit --</option>
-              <option value="Yeni Aprilia">Yeni Aprilia</option>
-              <option value="Udin Pradana">Udin Pradana</option>
-              <option value="Sri Rahayu">Sri Rahayu</option>
-              <option value="Novayunda Ara">Novayunda Ara</option>
-              <option value="Fitriani Kamila">Fitriani Kamila</option>
-              <option value="Ririn Cahyaningrum">Ririn Cahyaningrum</option>
-              <option value="Arjun Annajah">Arjun Annajah</option>
-              <option value="Yogik Eka">Yogik Eka</option>
-              <option value="Moh. Yudi">Moh. Yudi</option>
-              <option value="Dastin Indra Yudha">Dastin Indra Yudha</option>
+              <option value="YA">Yeni Aprilia</option>
+              <option value="UP">Udin Pradana</option>
+              <option value="SR">Sri Rahayu</option>
+              <option value="NA">Novayunda Ara</option>
+              <option value="FK">Fitriani Kamila</option>
+              <option value="RC">Ririn Cahyaningrum</option>
+              <option value="AA">Arjun Annajah</option>
+              <option value="YE">Yogik Eka</option>
+              <option value="MY">Moh. Yudi</option>
+              <option value="DIY">Dastin Indra Yudha</option>
             </select>
           </div>
           <div>
             <label class="block text-[11px] text-gray-600 mb-1">Singkatan *</label>
-            <select class="w-full p-2 border rounded border-gray-300 bg-white">
+            <select id="select-kode" class="w-full p-2 border rounded border-gray-300 bg-white">
               <option value="">-- Kode --</option>
-              <option value="EXW" selected>EXW</option>
+              <option value="YA">YA</option>
+              <option value="UP">UP</option>
+              <option value="SR">SR</option>
+              <option value="NA">NA</option>
+              <option value="FK">FK</option>
+              <option value="RC">RC</option>
+              <option value="AA">AA</option>
+              <option value="YE">YE</option>
+              <option value="MY">MY</option>
+              <option value="DIY">DIY</option>
             </select>
           </div>
         </div>
@@ -131,7 +140,7 @@
         <!-- Header Clean dengan Garis Kuning -->
         <div class="border-b-4 border-[#F5B850] pb-2 mb-6">
           <div class="flex justify-between items-center w-full">
-            <!-- Logo EXCO.png (Ukuran Diperbesar Memenuhi Header) -->
+            <!-- Logo EXCO.png -->
             <div class="flex items-center">
               <img src="EXCO.png" alt="EXCO Logo" class="h-28 w-auto object-contain" />
             </div>
@@ -244,6 +253,11 @@
 
   <!-- JavaScript Interaktivitas & Cetak -->
   <script>
+    function updateKodePenerbit() {
+      const penerbitVal = document.getElementById('select-penerbit').value;
+      document.getElementById('select-kode').value = penerbitVal;
+    }
+
     function updatePreview() {
       const nama = document.getElementById('input-nama').value;
       if (nama) {
