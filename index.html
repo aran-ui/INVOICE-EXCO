@@ -89,13 +89,13 @@
           </div>
         </div>
 
-        <!-- Dropdown Cabang / Lokasi -->
+        <!-- Dropdown Lokasi Excowork -->
         <div class="text-xs pt-1 border-t border-yellow-200/60">
-          <label class="block text-[11px] text-gray-600 mb-1">Cabang / Lokasi *</label>
+          <label class="block text-[11px] text-gray-600 mb-1">Lokasi Excowork *</label>
           <select id="select-cabang" onchange="updatePreview()" class="w-full p-2 border rounded border-gray-300 bg-white">
-            <option value="">-- Pilih Cabang --</option>
-            <option value="Pare">Pare</option>
-            <option value="Jogja">Jogja</option>
+            <option value="">-- Pilih Lokasi --</option>
+            <option value="Excowork Pare">Excowork Pare</option>
+            <option value="Excowork Jogja">Excowork Jogja</option>
           </select>
         </div>
       </div>
@@ -150,11 +150,11 @@
         <!-- Header Clean dengan Garis Kuning -->
         <div class="border-b-4 border-[#F5B850] pb-2 mb-6">
           <div class="flex justify-between items-start w-full">
-            <!-- Logo EXCO.png & Teks Cabang di Bawahnya -->
+            <!-- Logo EXCO.png & Teks Lokasi di Bawahnya -->
             <div class="flex flex-col items-start">
               <img src="EXCO.png" alt="EXCO Logo" class="h-24 w-auto object-contain" />
-              <!-- Teks Cabang Tepat di Bawah Logo -->
-              <p id="prev-cabang" class="text-xs font-bold text-gray-600 tracking-wider uppercase ml-1 mt-1"></p>
+              <!-- Teks Lokasi Tepat di Bawah Logo -->
+              <p id="prev-cabang" class="text-xs font-bold text-gray-700 tracking-wider uppercase ml-1 mt-1"></p>
             </div>
 
             <!-- Sisi Kanan: INVOICE + Invoice Number -->
@@ -285,8 +285,8 @@
       if (email) kontakArr.push(email);
       document.getElementById('prev-kontak').innerText = kontakArr.join(" - ");
 
-      // Update Teks Cabang di Bawah Logo EXCO
-      document.getElementById('prev-cabang').innerText = cabang ? "CABANG " + cabang.toUpperCase() : "";
+      // Update Teks Lokasi di Bawah Logo EXCO (Langsung sesuai pilihan: EXCOWORK PARE / EXCOWORK JOGJA)
+      document.getElementById('prev-cabang').innerText = cabang ? cabang.toUpperCase() : "";
     }
 
     function downloadPDF() {
