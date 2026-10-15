@@ -126,6 +126,41 @@
           <button class="bg-black text-white text-[10px] font-bold px-2 py-1 rounded">+ Tambah Ruang</button>
         </div>
 
+        <!-- Dropdown Pemilihan Ruang -->
+        <div>
+          <label class="block text-[11px] text-gray-600 mb-1">Pilih Ruang *</label>
+          <select id="select-ruang" onchange="handleRuangChange()" class="w-full p-2 text-xs border rounded border-gray-300 bg-white">
+            <option value="">-- Pilih Ruang --</option>
+            <option value="Public Space Pare">Public Space Pare</option>
+            <option value="Public Space Jogja">Public Space Jogja</option>
+            <option value="Private Pare">Private Pare</option>
+            <option value="Private Jogja">Private Jogja</option>
+            <option value="Meeting 5 Kursi">Meeting 5 Kursi</option>
+            <option value="Meeting 6 Kursi">Meeting 6 Kursi</option>
+            <option value="Meeting 8 Kursi">Meeting 8 Kursi</option>
+            <option value="Meeting 10 Kursi">Meeting 10 Kursi</option>
+            <option value="Office 5 Kursi">Office 5 Kursi</option>
+            <option value="Office 6 Kursi">Office 6 Kursi</option>
+            <option value="Office 8 Kursi">Office 8 Kursi</option>
+            <option value="Office 10 Kursi">Office 10 Kursi</option>
+            <option value="Exhall">Exhall</option>
+            <option value="Event Space">Event Space</option>
+            <option value="Membership Public space">Membership Public space</option>
+            <option value="Virtual Space">Virtual Space</option>
+            <option value="Mini Edu">Mini Edu</option>
+            <option value="Meeting room">Meeting room</option>
+            <option value="Corporate Space">Corporate Space</option>
+            <option value="Add on">Add on</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+
+          <!-- Input Manual Jika Memilih 'Lainnya' -->
+          <div id="container-ruang-manual" class="hidden mt-2">
+            <label class="block text-[11px] text-amber-800 font-semibold mb-1">Nama Ruang Manual *</label>
+            <input type="text" id="input-ruang-manual" oninput="updatePreview()" placeholder="Ketik nama ruang secara manual" class="w-full text-xs p-2 border border-amber-300 rounded bg-amber-50/50" />
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block text-[11px] text-gray-600 mb-1">Booking Date</label>
@@ -221,7 +256,7 @@
           </thead>
           <tbody class="divide-y divide-gray-200">
             <tr>
-              <td class="py-2">Meeting 8 kursi</td>
+              <td id="prev-desc" class="py-2 font-medium">Meeting 8 kursi</td>
               <td class="py-2 text-right">Rp175.000</td>
               <td class="py-2 text-center">8 Jam</td>
               <td class="py-2 text-center">1</td>
@@ -280,13 +315,24 @@
       document.getElementById('select-kode').value = penerbitVal;
     }
 
+    function handleRuangChange() {
+      const val = document.getElementById('select-ruang').value;
+      const containerManual = document.getElementById('container-ruang-manual');
+      if (val === 'Lainnya') {
+        containerManual.classList.remove('hidden');
+      } else {
+        containerManual.classList.add('hidden');
+        document.getElementById('input-ruang-manual').value = '';
+      }
+      updatePreview();
+    }
+
     function formatTanggalIndo(dateStr) {
       if (!dateStr) return "-";
       const parts = dateStr.split("-");
       if (parts.length !== 3) return dateStr;
       
       const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
-      const option = { day: 'numeric', month: 'Long', year: 'numeric' };
       return dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
@@ -312,6 +358,9 @@
       const email = document.getElementById('input-email').value.trim();
       const cabang = document.getElementById('select-cabang').value;
       
+      const ruangPilihan = document.getElementById('select-ruang').value;
+      const ruangManual = document.getElementById('input-ruang-manual').value.trim();
+      
       const booking = document.getElementById('input-booking').value;
       const due = document.getElementById('input-due').value;
       const start = document.getElementById('input-start').value.trim();
@@ -328,6 +377,15 @@
 
       // Update Teks Lokasi
       document.getElementById('prev-cabang').innerText = cabang ? cabang.toUpperCase() : "";
+
+      // Update Deskripsi Ruang di Tabel Invoice
+      if (ruangPilihan === 'Lainnya') {
+        document.getElementById('prev-desc').innerText = ruangManual ? ruangManual : "Meeting 8 kursi";
+      } else if (ruangPilihan) {
+        document.getElementById('prev-desc').innerText = ruangPilihan;
+      } else {
+        document.getElementById('prev-desc').innerText = "Meeting 8 kursi";
+      }
 
       // Update Booking & Due Date
       document.getElementById('prev-booking').innerText = booking ? formatTanggalIndo(booking) : "-";
