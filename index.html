@@ -123,42 +123,7 @@
       <div class="border border-gray-200 bg-gray-50/50 p-3 rounded-lg space-y-3">
         <div class="flex justify-between items-center">
           <label class="block text-xs font-bold text-gray-700 uppercase">Sewa Ruang (Opsional)</label>
-          <button class="bg-black text-white text-[10px] font-bold px-2 py-1 rounded">+ Tambah Ruang</button>
-        </div>
-
-        <!-- Dropdown Pemilihan Ruang -->
-        <div>
-          <label class="block text-[11px] text-gray-600 mb-1">Pilih Ruang *</label>
-          <select id="select-ruang" onchange="handleRuangChange()" class="w-full p-2 text-xs border rounded border-gray-300 bg-white">
-            <option value="">-- Pilih Ruang --</option>
-            <option value="Public Space Pare">Public Space Pare</option>
-            <option value="Public Space Jogja">Public Space Jogja</option>
-            <option value="Private Pare">Private Pare</option>
-            <option value="Private Jogja">Private Jogja</option>
-            <option value="Meeting 5 Kursi">Meeting 5 Kursi</option>
-            <option value="Meeting 6 Kursi">Meeting 6 Kursi</option>
-            <option value="Meeting 8 Kursi">Meeting 8 Kursi</option>
-            <option value="Meeting 10 Kursi">Meeting 10 Kursi</option>
-            <option value="Office 5 Kursi">Office 5 Kursi</option>
-            <option value="Office 6 Kursi">Office 6 Kursi</option>
-            <option value="Office 8 Kursi">Office 8 Kursi</option>
-            <option value="Office 10 Kursi">Office 10 Kursi</option>
-            <option value="Exhall">Exhall</option>
-            <option value="Event Space">Event Space</option>
-            <option value="Membership Public space">Membership Public space</option>
-            <option value="Virtual Space">Virtual Space</option>
-            <option value="Mini Edu">Mini Edu</option>
-            <option value="Meeting room">Meeting room</option>
-            <option value="Corporate Space">Corporate Space</option>
-            <option value="Add on">Add on</option>
-            <option value="Lainnya">Lainnya</option>
-          </select>
-
-          <!-- Input Manual Jika Memilih 'Lainnya' -->
-          <div id="container-ruang-manual" class="hidden mt-2">
-            <label class="block text-[11px] text-amber-800 font-semibold mb-1">Nama Ruang Manual *</label>
-            <input type="text" id="input-ruang-manual" oninput="updatePreview()" placeholder="Ketik nama ruang secara manual" class="w-full text-xs p-2 border border-amber-300 rounded bg-amber-50/50" />
-          </div>
+          <button type="button" onclick="tambahRuangItem()" class="bg-black hover:bg-gray-800 text-white text-[10px] font-bold px-2 py-1 rounded transition">+ Tambah Ruang</button>
         </div>
 
         <div class="grid grid-cols-2 gap-2">
@@ -182,6 +147,80 @@
             <input type="text" id="input-end" oninput="updatePreview()" placeholder="Misal: 19.00 / 13 Okt" class="w-full text-xs p-2 border rounded border-gray-300" />
           </div>
         </div>
+
+        <!-- Container Daftar Item Ruang -->
+        <div id="ruang-list-container" class="space-y-3 pt-2 border-t border-gray-200">
+          <!-- Item Ruang Pertama -->
+          <div class="ruang-item bg-white p-3 rounded border border-gray-200 space-y-2 relative" data-index="0">
+            <div class="flex justify-between items-center border-b pb-1">
+              <span class="text-[11px] font-bold text-gray-700">Item Ruang #1</span>
+            </div>
+
+            <div>
+              <label class="block text-[10px] text-gray-600 mb-0.5">Pilih Ruang *</label>
+              <select onchange="handleRuangChange(this)" class="select-ruang w-full p-1.5 text-xs border rounded border-gray-300 bg-white">
+                <option value="">-- Pilih Ruang --</option>
+                <option value="Public Space Pare">Public Space Pare</option>
+                <option value="Public Space Jogja">Public Space Jogja</option>
+                <option value="Private Pare">Private Pare</option>
+                <option value="Private Jogja">Private Jogja</option>
+                <option value="Meeting 5 Kursi">Meeting 5 Kursi</option>
+                <option value="Meeting 6 Kursi">Meeting 6 Kursi</option>
+                <option value="Meeting 8 Kursi">Meeting 8 Kursi</option>
+                <option value="Meeting 10 Kursi">Meeting 10 Kursi</option>
+                <option value="Office 5 Kursi">Office 5 Kursi</option>
+                <option value="Office 6 Kursi">Office 6 Kursi</option>
+                <option value="Office 8 Kursi">Office 8 Kursi</option>
+                <option value="Office 10 Kursi">Office 10 Kursi</option>
+                <option value="Exhall">Exhall</option>
+                <option value="Event Space">Event Space</option>
+                <option value="Membership Public space">Membership Public space</option>
+                <option value="Virtual Space">Virtual Space</option>
+                <option value="Mini Edu">Mini Edu</option>
+                <option value="Meeting room">Meeting room</option>
+                <option value="Corporate Space">Corporate Space</option>
+                <option value="Add on">Add on</option>
+                <option value="Lainnya">Lainnya</option>
+              </select>
+              <input type="text" oninput="updatePreview()" placeholder="Ketik nama ruang manual" class="input-ruang-manual hidden mt-1 w-full text-xs p-1.5 border border-amber-300 rounded bg-amber-50/50" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] text-gray-600 mb-0.5">Harga Rate (Rp)</label>
+                <input type="number" oninput="updatePreview()" placeholder="175000" class="input-rate w-full text-xs p-1.5 border rounded border-gray-300" />
+              </div>
+              <div>
+                <label class="block text-[10px] text-gray-600 mb-0.5">Diskon (Rp)</label>
+                <input type="number" oninput="updatePreview()" placeholder="Opsional (misal 25000)" class="input-diskon w-full text-xs p-1.5 border rounded border-gray-300" />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] text-gray-600 mb-0.5">Durasi</label>
+                <select onchange="updatePreview()" class="select-durasi w-full p-1.5 text-xs border rounded border-gray-300 bg-white">
+                  <option value="">-- Pilih Durasi --</option>
+                  <option value="1 Jam">1 Jam</option>
+                  <option value="2 Jam">2 Jam</option>
+                  <option value="3 Jam">3 Jam</option>
+                  <option value="4 Jam">4 Jam</option>
+                  <option value="5 Jam">5 Jam</option>
+                  <option value="6 Jam">6 Jam</option>
+                  <option value="8 Jam">8 Jam</option>
+                  <option value="1 Hari">1 Hari</option>
+                  <option value="1 Bulan">1 Bulan</option>
+                  <option value="1 Tahun">1 Tahun</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] text-gray-600 mb-0.5">Qty</label>
+                <input type="number" oninput="updatePreview()" value="1" min="1" class="input-qty w-full text-xs p-1.5 border rounded border-gray-300" />
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Tombol Simpan -->
@@ -243,7 +282,7 @@
           </div>
         </div>
 
-        <!-- Tabel Utama -->
+        <!-- Tabel Utama Invoice -->
         <table class="w-full text-xs text-left mb-4 border-collapse">
           <thead>
             <tr class="border-b-2 border-gray-300 font-bold uppercase text-gray-700">
@@ -254,14 +293,8 @@
               <th class="py-2 text-right">AMMOUNT</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200">
-            <tr>
-              <td id="prev-desc" class="py-2 font-medium">Meeting 8 kursi</td>
-              <td class="py-2 text-right">Rp175.000</td>
-              <td class="py-2 text-center">8 Jam</td>
-              <td class="py-2 text-center">1</td>
-              <td class="py-2 text-right">Rp 175.000</td>
-            </tr>
+          <tbody id="invoice-tbody" class="divide-y divide-gray-200">
+            <!-- Isi tabel di-render dinamis oleh JavaScript -->
           </tbody>
         </table>
 
@@ -270,7 +303,7 @@
           <div class="w-1/2 text-xs space-y-1 border-t pt-2">
             <div class="flex justify-between font-bold">
               <span>Total</span>
-              <span>Rp 175.000</span>
+              <span id="prev-total">Rp 0</span>
             </div>
             <div class="flex justify-between text-gray-600">
               <span>DP</span>
@@ -278,14 +311,14 @@
             </div>
             <div class="flex justify-between font-bold text-gray-800 border-t pt-1">
               <span>PELUNASAN</span>
-              <span>Rp 175.000</span>
+              <span id="prev-pelunasan">Rp 0</span>
             </div>
           </div>
         </div>
 
         <!-- Terbilang & Info Pembayaran -->
         <div class="text-xs space-y-2 mb-6 bg-gray-50 p-3 rounded border border-gray-200">
-          <p><strong class="font-semibold text-gray-700">TERBILANG :</strong> <span class="italic font-medium">Seratus Tujuh Puluh Lima Ribu Rupiah</span></p>
+          <p><strong class="font-semibold text-gray-700">TERBILANG :</strong> <span id="prev-terbilang" class="italic font-medium">-</span></p>
           <p><strong class="font-semibold text-gray-700">PEMBAYARAN :</strong> Mandiri / Aran Ruangan Kerja / 171-05-00004-000</p>
         </div>
 
@@ -310,28 +343,116 @@
 
   <!-- JavaScript Interaktivitas & Cetak -->
   <script>
+    let ruangCount = 1;
+
     function updateKodePenerbit() {
       const penerbitVal = document.getElementById('select-penerbit').value;
       document.getElementById('select-kode').value = penerbitVal;
     }
 
-    function handleRuangChange() {
-      const val = document.getElementById('select-ruang').value;
-      const containerManual = document.getElementById('container-ruang-manual');
-      if (val === 'Lainnya') {
-        containerManual.classList.remove('hidden');
+    function handleRuangChange(selectElem) {
+      const container = selectElem.closest('.ruang-item');
+      const manualInput = container.querySelector('.input-ruang-manual');
+      if (selectElem.value === 'Lainnya') {
+        manualInput.classList.remove('hidden');
       } else {
-        containerManual.classList.add('hidden');
-        document.getElementById('input-ruang-manual').value = '';
+        manualInput.classList.add('hidden');
+        manualInput.value = '';
       }
       updatePreview();
+    }
+
+    function tambahRuangItem() {
+      ruangCount++;
+      const container = document.getElementById('ruang-list-container');
+      const newItem = document.createElement('div');
+      newItem.className = 'ruang-item bg-white p-3 rounded border border-gray-200 space-y-2 relative';
+      newItem.setAttribute('data-index', ruangCount - 1);
+      
+      newItem.innerHTML = `
+        <div class="flex justify-between items-center border-b pb-1">
+          <span class="text-[11px] font-bold text-gray-700">Item Ruang #${ruangCount}</span>
+          <button type="button" onclick="hapusRuangItem(this)" class="text-red-500 hover:text-red-700 font-bold text-xs">🗑️ Hapus</button>
+        </div>
+        <div>
+          <label class="block text-[10px] text-gray-600 mb-0.5">Pilih Ruang *</label>
+          <select onchange="handleRuangChange(this)" class="select-ruang w-full p-1.5 text-xs border rounded border-gray-300 bg-white">
+            <option value="">-- Pilih Ruang --</option>
+            <option value="Public Space Pare">Public Space Pare</option>
+            <option value="Public Space Jogja">Public Space Jogja</option>
+            <option value="Private Pare">Private Pare</option>
+            <option value="Private Jogja">Private Jogja</option>
+            <option value="Meeting 5 Kursi">Meeting 5 Kursi</option>
+            <option value="Meeting 6 Kursi">Meeting 6 Kursi</option>
+            <option value="Meeting 8 Kursi">Meeting 8 Kursi</option>
+            <option value="Meeting 10 Kursi">Meeting 10 Kursi</option>
+            <option value="Office 5 Kursi">Office 5 Kursi</option>
+            <option value="Office 6 Kursi">Office 6 Kursi</option>
+            <option value="Office 8 Kursi">Office 8 Kursi</option>
+            <option value="Office 10 Kursi">Office 10 Kursi</option>
+            <option value="Exhall">Exhall</option>
+            <option value="Event Space">Event Space</option>
+            <option value="Membership Public space">Membership Public space</option>
+            <option value="Virtual Space">Virtual Space</option>
+            <option value="Mini Edu">Mini Edu</option>
+            <option value="Meeting room">Meeting room</option>
+            <option value="Corporate Space">Corporate Space</option>
+            <option value="Add on">Add on</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+          <input type="text" oninput="updatePreview()" placeholder="Ketik nama ruang manual" class="input-ruang-manual hidden mt-1 w-full text-xs p-1.5 border border-amber-300 rounded bg-amber-50/50" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] text-gray-600 mb-0.5">Harga Rate (Rp)</label>
+            <input type="number" oninput="updatePreview()" placeholder="175000" class="input-rate w-full text-xs p-1.5 border rounded border-gray-300" />
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-600 mb-0.5">Diskon (Rp)</label>
+            <input type="number" oninput="updatePreview()" placeholder="Opsional (misal 25000)" class="input-diskon w-full text-xs p-1.5 border rounded border-gray-300" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[10px] text-gray-600 mb-0.5">Durasi</label>
+            <select onchange="updatePreview()" class="select-durasi w-full p-1.5 text-xs border rounded border-gray-300 bg-white">
+              <option value="">-- Pilih Durasi --</option>
+              <option value="1 Jam">1 Jam</option>
+              <option value="2 Jam">2 Jam</option>
+              <option value="3 Jam">3 Jam</option>
+              <option value="4 Jam">4 Jam</option>
+              <option value="5 Jam">5 Jam</option>
+              <option value="6 Jam">6 Jam</option>
+              <option value="8 Jam">8 Jam</option>
+              <option value="1 Hari">1 Hari</option>
+              <option value="1 Bulan">1 Bulan</option>
+              <option value="1 Tahun">1 Tahun</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-600 mb-0.5">Qty</label>
+            <input type="number" oninput="updatePreview()" value="1" min="1" class="input-qty w-full text-xs p-1.5 border rounded border-gray-300" />
+          </div>
+        </div>
+      `;
+      container.appendChild(newItem);
+      updatePreview();
+    }
+
+    function hapusRuangItem(btn) {
+      const item = btn.closest('.ruang-item');
+      item.remove();
+      updatePreview();
+    }
+
+    function formatRupiah(number) {
+      return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
     }
 
     function formatTanggalIndo(dateStr) {
       if (!dateStr) return "-";
       const parts = dateStr.split("-");
       if (parts.length !== 3) return dateStr;
-      
       const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
       return dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
     }
@@ -339,14 +460,11 @@
     function handleBookingDateChange() {
       const bookingVal = document.getElementById('input-booking').value;
       if (bookingVal) {
-        // H+1 Otomatis
         const bookingDate = new Date(bookingVal);
         bookingDate.setDate(bookingDate.getDate() + 1);
-        
         const yyyy = bookingDate.getFullYear();
         const mm = String(bookingDate.getMonth() + 1).padStart(2, '0');
         const dd = String(bookingDate.getDate()).padStart(2, '0');
-        
         document.getElementById('input-due').value = `${yyyy}-${mm}-${dd}`;
       }
       updatePreview();
@@ -358,42 +476,74 @@
       const email = document.getElementById('input-email').value.trim();
       const cabang = document.getElementById('select-cabang').value;
       
-      const ruangPilihan = document.getElementById('select-ruang').value;
-      const ruangManual = document.getElementById('input-ruang-manual').value.trim();
-      
       const booking = document.getElementById('input-booking').value;
       const due = document.getElementById('input-due').value;
       const start = document.getElementById('input-start').value.trim();
       const end = document.getElementById('input-end').value.trim();
 
-      // Update Nama
+      // Header & Informasi Tamu
       document.getElementById('prev-nama').innerText = nama ? nama : "-";
 
-      // Update Kontak "no wa - email"
       let kontakArr = [];
       if (wa) kontakArr.push(wa);
       if (email) kontakArr.push(email);
       document.getElementById('prev-kontak').innerText = kontakArr.join(" - ");
 
-      // Update Teks Lokasi
       document.getElementById('prev-cabang').innerText = cabang ? cabang.toUpperCase() : "";
-
-      // Update Deskripsi Ruang di Tabel Invoice
-      if (ruangPilihan === 'Lainnya') {
-        document.getElementById('prev-desc').innerText = ruangManual ? ruangManual : "Meeting 8 kursi";
-      } else if (ruangPilihan) {
-        document.getElementById('prev-desc').innerText = ruangPilihan;
-      } else {
-        document.getElementById('prev-desc').innerText = "Meeting 8 kursi";
-      }
-
-      // Update Booking & Due Date
       document.getElementById('prev-booking').innerText = booking ? formatTanggalIndo(booking) : "-";
       document.getElementById('prev-due').innerText = due ? formatTanggalIndo(due) : "-";
-
-      // Update Start & End
       document.getElementById('prev-start').innerText = start ? start : "-";
       document.getElementById('prev-end').innerText = end ? end : "-";
+
+      // Render Baris Tabel Ruang
+      const tbody = document.getElementById('invoice-tbody');
+      tbody.innerHTML = '';
+
+      let grandTotal = 0;
+      const ruangItems = document.querySelectorAll('.ruang-item');
+
+      ruangItems.forEach(item => {
+        const selectRuang = item.querySelector('.select-ruang').value;
+        const manualRuang = item.querySelector('.input-ruang-manual').value.trim();
+        const rateVal = parseFloat(item.querySelector('.input-rate').value) || 0;
+        const diskonVal = parseFloat(item.querySelector('.input-diskon').value) || 0;
+        const durasiVal = item.querySelector('.select-durasi').value || '-';
+        const qtyVal = parseInt(item.querySelector('.input-qty').value) || 1;
+
+        // Tentukan Nama Ruang (Jika belum dipilih, tampilkan "-")
+        let namaRuang = "-";
+        if (selectRuang === 'Lainnya') {
+          namaRuang = manualRuang ? manualRuang : "-";
+        } else if (selectRuang) {
+          namaRuang = selectRuang;
+        }
+
+        // Tentukan Harga Efektif setelah Diskon
+        const hargaSetelDiskon = diskonVal > 0 ? Math.max(0, rateVal - diskonVal) : rateVal;
+        const amountRow = hargaSetelDiskon * qtyVal;
+        grandTotal += amountRow;
+
+        // Visualisasi Kolom Rate (Menampilkan Coret jika ada Diskon)
+        let rateHTML = formatRupiah(rateVal);
+        if (diskonVal > 0 && rateVal > 0) {
+          rateHTML = `<span class="line-through text-gray-400 text-[10px] block">${formatRupiah(rateVal)}</span>` +
+                     `<span class="text-emerald-700 font-bold">${formatRupiah(hargaSetelDiskon)}</span>`;
+        }
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="py-2 font-medium text-gray-800">${namaRuang}</td>
+          <td class="py-2 text-right">${rateVal > 0 ? rateHTML : '-'}</td>
+          <td class="py-2 text-center">${durasiVal}</td>
+          <td class="py-2 text-center">${qtyVal}</td>
+          <td class="py-2 text-right font-semibold">${amountRow > 0 ? formatRupiah(amountRow) : '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Update Total & Pelunasan
+      document.getElementById('prev-total').innerText = formatRupiah(grandTotal);
+      document.getElementById('prev-pelunasan').innerText = formatRupiah(grandTotal);
     }
 
     function downloadPDF() {
@@ -407,6 +557,11 @@
       };
       html2pdf().set(opt).from(element).save();
     }
+
+    // Jalankan render awal saat halaman dimuat
+    document.addEventListener('DOMContentLoaded', () => {
+      updatePreview();
+    });
   </script>
 </body>
 </html>
