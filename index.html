@@ -121,26 +121,25 @@
         
         <!-- Header Clean dengan Garis Kuning -->
         <div class="border-b-4 border-[#F5B850] pb-4 mb-6">
-          <div class="flex justify-between items-center w-full">
-            <!-- Logo EXCO.png (Ukuran diperbesar menjadi h-20 / 80px) -->
+          <div class="flex justify-between items-start w-full">
+            <!-- Logo EXCO.png (Sesuai tinggi teks INVOICE) -->
             <div class="flex items-center">
-              <img src="EXCO.png" alt="EXCO Logo" class="h-20 object-contain" />
+              <img src="EXCO.png" alt="EXCO Logo" class="h-12 object-contain" />
             </div>
 
-            <!-- Sisi Kanan: Tulisan INVOICE & Badge Status PAID -->
-            <div class="flex items-center gap-3">
-              <h1 class="text-4xl font-extrabold text-gray-800 tracking-wider">INVOICE</h1>
-              <span class="bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm">
-                PAID
-              </span>
-            </div>
-          </div>
-
-          <!-- Baris Nomor Invoice dengan Garis Kuning Tipis -->
-          <div class="flex justify-end mt-3">
-            <div class="bg-gray-50 border-l-4 border-[#F5B850] px-3 py-1 text-xs">
-              <span class="font-bold text-gray-700">Invoice Number :</span>
-              <span id="prev-inv" class="font-semibold text-gray-900 ml-1">INV-2333/EXW/1026</span>
+            <!-- Sisi Kanan: INVOICE + Invoice Number Persis Di Bawahnya -->
+            <div class="flex flex-col items-end">
+              <div class="flex items-center gap-3">
+                <h1 class="text-4xl font-extrabold text-gray-800 tracking-wider leading-none">INVOICE</h1>
+                <span class="bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm">
+                  PAID
+                </span>
+              </div>
+              <!-- Invoice Number Pas Di Bawah INVOICE -->
+              <div class="bg-gray-50 border-l-4 border-[#F5B850] px-3 py-1 text-xs mt-2">
+                <span class="font-bold text-gray-700">Invoice Number :</span>
+                <span id="prev-inv" class="font-semibold text-gray-900 ml-1">INV-2333/EXW/1026</span>
+              </div>
             </div>
           </div>
         </div>
@@ -158,7 +157,14 @@
               <span>Start <strong id="prev-start">12.00</strong></span>
               <span>End <strong id="prev-end">19.00</strong></span>
             </div>
-            <p class="pt-1 font-semibold text-gray-600">Ammount Due <strong class="text-gray-900 ml-1">Rp 0</strong></p>
+            
+            <!-- Kolom Amount Due Berkotak -->
+            <div class="pt-2 flex justify-end">
+              <div class="border border-gray-300 bg-gray-50 rounded px-3 py-1.5 inline-block text-right shadow-sm">
+                <span class="font-semibold text-gray-600 text-xs">Amount Due :</span>
+                <strong class="text-gray-900 font-bold ml-1 text-sm">Rp 0</strong>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -203,7 +209,7 @@
         </div>
 
         <!-- Terbilang & Info Pembayaran -->
-        <div class="text-xs space-y-2 mb-6 bg-gray-50 p-3 rounded">
+        <div class="text-xs space-y-2 mb-6 bg-gray-50 p-3 rounded border border-gray-200">
           <p><strong class="font-semibold text-gray-700">TERBILANG :</strong> <span class="italic font-medium">Seratus Tujuh Puluh Lima Ribu Rupiah</span></p>
           <p><strong class="font-semibold text-gray-700">PEMBAYARAN :</strong> Mandiri / Aran Ruangan Kerja / 171-05-00004-000</p>
         </div>
