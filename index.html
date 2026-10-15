@@ -73,7 +73,7 @@
           </div>
           <div>
             <label class="block text-[11px] text-gray-600 mb-1">Singkatan *</label>
-            <select id="select-kode" class="w-full p-2 border rounded border-gray-300 bg-white">
+            <select id="select-kode" onchange="updatePreview()" class="w-full p-2 border rounded border-gray-300 bg-white">
               <option value="">-- Kode --</option>
               <option value="YA">YA</option>
               <option value="UP">UP</option>
@@ -220,7 +220,7 @@
         </div>
       </div>
 
-      <!-- ==================== LAYANAN TAMBAHAN / EXTRA SERVICE ==================== -->
+      <!-- LAYANAN TAMBAHAN / EXTRA SERVICE -->
       <div class="border border-blue-200 bg-blue-50/40 p-4 rounded-xl space-y-3">
         <div class="flex justify-between items-center">
           <h3 class="text-xs font-bold text-blue-900 tracking-wide uppercase">LAYANAN TAMBAHAN / EXTRA SERVICE</h3>
@@ -229,10 +229,64 @@
           </button>
         </div>
 
-        <!-- Container Daftar Extra Service -->
         <div id="extra-service-container" class="space-y-3">
           <p id="empty-extra-msg" class="text-xs italic text-gray-500 py-1">Belum ada layanan tambahan.</p>
         </div>
+      </div>
+
+      <!-- ==================== STATUS & RIWAYAT PEMBAYARAN ==================== -->
+      <div class="border border-amber-200 bg-amber-50/50 p-4 rounded-xl space-y-3">
+        <h3 class="text-xs font-bold text-amber-900 tracking-wide uppercase">STATUS & RIWAYAT PEMBAYARAN</h3>
+        
+        <!-- No Urut Invoice -->
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-700 mb-1">No. Urut Invoice Manual / Otomatis</label>
+          <div class="flex items-center">
+            <span class="bg-gray-200 text-gray-700 text-xs px-3 py-2 border border-r-0 border-gray-300 rounded-l font-bold">INV-</span>
+            <input type="text" id="input-no-urut" oninput="updatePreview()" value="2003" class="w-full text-xs p-2 border border-gray-300 font-bold text-gray-800 focus:outline-none focus:ring-1 focus:ring-amber-500" />
+            <span id="suffix-inv" class="bg-gray-200 text-gray-600 text-xs px-3 py-2 border border-l-0 border-gray-300 rounded-r font-medium whitespace-nowrap">/OFO/1026</span>
+          </div>
+        </div>
+
+        <!-- Nominal DP & Pelunasan 1 -->
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pembayaran DP (Rp)</label>
+            <input type="number" id="input-dp" oninput="updatePreview()" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pelunasan 1 (Rp)</label>
+            <input type="number" id="input-pelunasan1" oninput="updatePreview()" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300" />
+          </div>
+        </div>
+
+        <!-- Status & Metode Pembayaran -->
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Status Pembayaran</label>
+            <select id="select-status-bayar" onchange="updatePreview()" class="w-full p-2 border rounded border-gray-300 bg-white text-xs">
+              <option value="Lunas">Lunas</option>
+              <option value="Belum Bayar">Belum Bayar</option>
+              <option value="Lunas DP">Lunas DP</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Metode Pembayaran *</label>
+            <select id="select-metode-bayar" onchange="updatePreview()" class="w-full p-2 border rounded border-gray-300 bg-white text-xs">
+              <option value="Mandiri">Transfer Bank Mandiri</option>
+              <option value="BCA">Transfer Bank BCA</option>
+              <option value="BRI">Transfer Bank BRI</option>
+              <option value="Cash">Tunai / Cash</option>
+              <option value="QRIS">QRIS</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== CATATAN KHUSUS / NOTE ==================== -->
+      <div class="border border-gray-200 bg-gray-50/60 p-4 rounded-xl space-y-2">
+        <h3 class="text-xs font-bold text-gray-700 tracking-wide uppercase">CATATAN KHUSUS / NOTE (OPSIONAL)</h3>
+        <input type="text" id="input-note" oninput="updatePreview()" placeholder="Contoh: Sewa extra bed tanpa sewa kamar" class="w-full text-xs p-2 border rounded border-gray-300 bg-white" />
       </div>
 
       <!-- Tombol Simpan -->
@@ -258,13 +312,13 @@
             <div class="flex flex-col items-end justify-center">
               <div class="flex items-center gap-3">
                 <h1 class="text-4xl font-extrabold text-gray-800 tracking-wider leading-none">INVOICE</h1>
-                <span class="bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm">
+                <span id="prev-badge-status" class="bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm">
                   PAID
                 </span>
               </div>
               <div class="bg-gray-50 border-l-4 border-[#F5B850] px-3 py-1 text-xs mt-3">
                 <span class="font-bold text-gray-700">Invoice Number :</span>
-                <span id="prev-inv" class="font-semibold text-gray-900 ml-1">INV-2333/EXW/1026</span>
+                <span id="prev-inv" class="font-semibold text-gray-900 ml-1">INV-2003/EXW/1026</span>
               </div>
             </div>
           </div>
@@ -287,7 +341,7 @@
             <div class="pt-2 flex justify-end">
               <div class="border border-gray-300 bg-gray-50 rounded px-3 py-1.5 inline-block text-right shadow-sm">
                 <span class="font-semibold text-gray-600 text-xs">Amount Due :</span>
-                <strong class="text-gray-900 font-bold ml-1 text-sm">Rp 0</strong>
+                <strong id="prev-amount-due" class="text-gray-900 font-bold ml-1 text-sm">Rp 0</strong>
               </div>
             </div>
           </div>
@@ -318,7 +372,7 @@
             </div>
             <div class="flex justify-between text-gray-600">
               <span>DP</span>
-              <span>Rp 0</span>
+              <span id="prev-dp-val">Rp 0</span>
             </div>
             <div class="flex justify-between font-bold text-gray-800 border-t pt-1">
               <span>PELUNASAN</span>
@@ -330,20 +384,25 @@
         <!-- Terbilang & Info Pembayaran -->
         <div class="text-xs space-y-2 mb-6 bg-gray-50 p-3 rounded border border-gray-200">
           <p><strong class="font-semibold text-gray-700">TERBILANG :</strong> <span id="prev-terbilang" class="italic font-medium">-</span></p>
-          <p><strong class="font-semibold text-gray-700">PEMBAYARAN :</strong> Mandiri / Aran Ruangan Kerja / 171-05-00004-000</p>
+          <p><strong class="font-semibold text-gray-700">PEMBAYARAN :</strong> <span id="prev-info-pembayaran">Mandiri / Aran Ruangan Kerja / 171-05-00004-000</span></p>
+        </div>
+
+        <!-- Catatan Khusus / Note jika ada -->
+        <div id="prev-note-container" class="text-xs mb-6 bg-amber-50 p-3 rounded border border-amber-200 hidden">
+          <p><strong class="font-semibold text-amber-900">CATATAN :</strong> <span id="prev-note-text" class="text-amber-800"></span></p>
         </div>
 
         <!-- Tanda Tangan -->
         <div class="flex justify-between items-end text-xs pt-4">
           <div class="text-gray-500 italic">
-            <p>Kediri, 12 Oktober 2026</p>
+            <p id="prev-lokasi-tgl">Kediri, 12 Oktober 2026</p>
             <p class="font-bold not-italic text-gray-700">PT. Aran Ruangan Kerja</p>
           </div>
           <div class="text-center relative pr-4">
             <div class="w-32 h-20 border border-dashed border-gray-300 rounded flex items-center justify-center text-gray-400 mb-1">
               [Stempel & TTD]
             </div>
-            <p class="font-bold underline uppercase text-gray-800">UDIN PRADANA</p>
+            <p id="prev-nama-ttd" class="font-bold underline uppercase text-gray-800">UDIN PRADANA</p>
             <p class="text-[10px] text-gray-500 uppercase tracking-wider">MANAJER</p>
           </div>
         </div>
@@ -358,6 +417,7 @@
     function updateKodePenerbit() {
       const penerbitVal = document.getElementById('select-penerbit').value;
       document.getElementById('select-kode').value = penerbitVal;
+      updatePreview();
     }
 
     function handleRuangChange(selectElem) {
@@ -597,6 +657,20 @@
       updatePreview();
     }
 
+    function terbilang(angka) {
+      const bil = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+      let hasil = "";
+      if (angka < 12) hasil = bil[angka];
+      else if (angka < 20) hasil = terbilang(angka - 10) + " Belas";
+      else if (angka < 100) hasil = terbilang(Math.floor(angka / 10)) + " Puluh " + terbilang(angka % 10);
+      else if (angka < 200) hasil = "Seratus " + terbilang(angka - 100);
+      else if (angka < 1000) hasil = terbilang(Math.floor(angka / 100)) + " Ratus " + terbilang(angka % 100);
+      else if (angka < 2000) hasil = "Seribu " + terbilang(angka - 1000);
+      else if (angka < 1000000) hasil = terbilang(Math.floor(angka / 1000)) + " Ribu " + terbilang(angka % 1000);
+      else if (angka < 1000000000) hasil = terbilang(Math.floor(angka / 1000000)) + " Juta " + terbilang(angka % 1000000);
+      return hasil.trim();
+    }
+
     function updatePreview() {
       const nama = document.getElementById('input-nama').value.trim();
       const wa = document.getElementById('input-wa').value.trim();
@@ -606,10 +680,41 @@
       const due = document.getElementById('input-due').value;
       const start = document.getElementById('input-start').value.trim();
       const end = document.getElementById('input-end').value.trim();
+      const kode = document.getElementById('select-kode').value || "EXW";
 
-      // Header & Informasi Tamu
+      // Status & Riwayat
+      const noUrut = document.getElementById('input-no-urut').value.trim() || "2003";
+      const dpVal = parseFloat(document.getElementById('input-dp').value) || 0;
+      const pelunasan1Val = parseFloat(document.getElementById('input-pelunasan1').value) || 0;
+      const statusBayar = document.getElementById('select-status-bayar').value;
+      const metodeBayar = document.getElementById('select-metode-bayar').value;
+
+      // Catatan
+      const noteVal = document.getElementById('input-note').value.trim();
+
+      // Tanggal & Bulan untuk Suffix Invoice (misal: 1026 untuk Okt 2026)
+      const now = new Date();
+      const monthStr = String(now.getMonth() + 1).padStart(2, '0');
+      const yearStr = String(now.getFullYear()).slice(-2);
+      const suffixInvStr = `/${kode}/${monthStr}${yearStr}`;
+      document.getElementById('suffix-inv').innerText = suffixInvStr;
+      document.getElementById('prev-inv').innerText = `INV-${noUrut}${suffixInvStr}`;
+
+      // Badge Status Pembayaran
+      const badgeElem = document.getElementById('prev-badge-status');
+      if (statusBayar === 'Lunas') {
+        badgeElem.innerText = 'PAID';
+        badgeElem.className = 'bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+      } else if (statusBayar === 'Belum Bayar') {
+        badgeElem.innerText = 'UNPAID';
+        badgeElem.className = 'bg-red-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+      } else {
+        badgeElem.innerText = 'DP LUNAS';
+        badgeElem.className = 'bg-amber-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+      }
+
+      // Info Penerima & Kontak
       document.getElementById('prev-nama').innerText = nama ? nama : "-";
-      
       let kontakArr = [];
       if (wa) kontakArr.push(wa);
       if (email) kontakArr.push(email);
@@ -626,7 +731,7 @@
       tbody.innerHTML = '';
       let grandTotal = 0;
 
-      // 1. Render Item Ruang
+      // 1. Item Ruang
       const ruangItems = document.querySelectorAll('.ruang-item');
       ruangItems.forEach(item => {
         const selectRuang = item.querySelector('.select-ruang').value;
@@ -664,7 +769,7 @@
         tbody.appendChild(tr);
       });
 
-      // 2. Render Item Extra Service
+      // 2. Extra Service
       const extraItems = document.querySelectorAll('.extra-service-item');
       extraItems.forEach(item => {
         const selectExtra = item.querySelector('.select-extra-nama').value;
@@ -702,9 +807,34 @@
         tbody.appendChild(tr);
       });
 
-      // Update Total & Pelunasan
+      // Hitung Sisa Pelunasan / Amount Due
+      const totalSisa = Math.max(0, grandTotal - dpVal - pelunasan1Val);
+
       document.getElementById('prev-total').innerText = formatRupiah(grandTotal);
-      document.getElementById('prev-pelunasan').innerText = formatRupiah(grandTotal);
+      document.getElementById('prev-dp-val').innerText = formatRupiah(dpVal);
+      document.getElementById('prev-pelunasan').innerText = formatRupiah(totalSisa);
+      document.getElementById('prev-amount-due').innerText = formatRupiah(totalSisa);
+
+      // Terbilang
+      const terbilangText = grandTotal > 0 ? terbilang(grandTotal) + " Rupiah" : "-";
+      document.getElementById('prev-terbilang').innerText = terbilangText;
+
+      // Info Metode Pembayaran
+      let infoBayarStr = "Mandiri / Aran Ruangan Kerja / 171-05-00004-000";
+      if (metodeBayar === 'BCA') infoBayarStr = "BCA / Aran Ruangan Kerja / 011-234-5678";
+      else if (metodeBayar === 'BRI') infoBayarStr = "BRI / Aran Ruangan Kerja / 0021-01-000123-30-5";
+      else if (metodeBayar === 'Cash') infoBayarStr = "Tunai / Cash di Kasir ExCowork";
+      else if (metodeBayar === 'QRIS') infoBayarStr = "QRIS ExCowork (Scan barcode kasir)";
+      document.getElementById('prev-info-pembayaran').innerText = infoBayarStr;
+
+      // Note / Catatan
+      const noteContainer = document.getElementById('prev-note-container');
+      if (noteVal) {
+        noteContainer.classList.remove('hidden');
+        document.getElementById('prev-note-text').innerText = noteVal;
+      } else {
+        noteContainer.classList.add('hidden');
+      }
     }
 
     function downloadPDF() {
@@ -719,7 +849,6 @@
       html2pdf().set(opt).from(element).save();
     }
 
-    // Jalankan render awal saat halaman dimuat
     document.addEventListener('DOMContentLoaded', () => {
       updatePreview();
     });
