@@ -18,6 +18,23 @@
       min-height: 297mm;
       padding: 15mm;
       background: white;
+      position: relative;
+      overflow: hidden;
+    }
+    /* Styling Watermark EXCO */
+    .invoice-watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-15deg);
+      width: 65%;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .invoice-content {
+      position: relative;
+      z-index: 10;
     }
   </style>
 </head>
@@ -246,19 +263,10 @@
           </div>
         </div>
 
-        <!-- Pilihan Opsi Pembayaran DP / Lunas & Nominal -->
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block text-[11px] font-semibold text-gray-700 mb-1">Tipe Awal Pembayaran</label>
-            <select id="select-tipe-awal" onchange="updatePreview()" class="w-full p-2 border rounded border-gray-300 bg-white text-xs">
-              <option value="DP">DP (Uang Muka)</option>
-              <option value="Lunas">Lunas</option>
-            </select>
-          </div>
-          <div>
-            <label id="label-nominal-awal" class="block text-[11px] font-semibold text-gray-700 mb-1">Pembayaran DP (Rp)</label>
-            <input type="number" id="input-dp" oninput="updatePreview()" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300" />
-          </div>
+        <!-- Nominal DP -->
+        <div>
+          <label class="block text-[11px] font-semibold text-gray-700 mb-1">Pembayaran DP (Rp)</label>
+          <input type="number" id="input-dp" oninput="updatePreview()" placeholder="0" class="w-full text-xs p-2 border rounded border-gray-300" />
         </div>
 
         <!-- Column Pelunasan Dinamis (1, 2, 3) -->
@@ -317,129 +325,134 @@
     <div class="lg:col-span-7 flex justify-center overflow-x-auto">
       <div id="invoice" class="invoice-card shadow-lg rounded border border-gray-200">
         
-        <!-- Header Clean dengan Garis Kuning -->
-        <div class="border-b-4 border-[#F5B850] pb-2 mb-6">
-          <div class="flex justify-between items-start w-full">
-            <div class="flex flex-col items-start">
-              <img src="EXCO.png" alt="EXCO Logo" class="h-24 w-auto object-contain" />
-              <p id="prev-cabang" class="text-xs font-bold text-gray-700 tracking-wider uppercase ml-1 mt-1"></p>
-            </div>
-            
-            <div class="flex flex-col items-end justify-center">
-              <div class="flex items-center gap-3">
-                <h1 class="text-4xl font-extrabold text-gray-800 tracking-wider leading-none">INVOICE</h1>
-                <span id="prev-badge-status" class="bg-red-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm">
-                  UNPAID
-                </span>
-              </div>
-              <div class="bg-gray-50 border-l-4 border-[#F5B850] px-3 py-1 text-xs mt-3">
-                <span class="font-bold text-gray-700">Invoice Number :</span>
-                <span id="prev-inv" class="font-semibold text-gray-900 ml-1">INV-2003/EXW/1026</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Watermark EXCO -->
+        <img src="EXCO.png" alt="EXCO Watermark" class="invoice-watermark" />
 
-        <!-- Detail Informasi Pelanggan & Tanggal -->
-        <div class="flex justify-between items-start mb-6 border-b pb-4 text-xs">
-          <div>
-            <p class="font-semibold text-gray-600">Billed To :</p>
-            <span id="prev-nama" class="font-bold text-sm text-gray-800 min-w-[120px] block mt-0.5">-</span>
-            <p id="prev-kontak" class="text-xs text-gray-500 mt-1"></p>
-          </div>
-          <div class="text-right space-y-1">
-            <p><span class="font-semibold text-gray-600">Due Date :</span> <span id="prev-due">-</span></p>
-            <p><span class="font-semibold text-gray-600">Booking Date :</span> <span id="prev-booking">-</span></p>
-            <div class="flex justify-end gap-2 pt-1 text-gray-600">
-              <span>Start <strong id="prev-start">-</strong></span>
-              <span>End <strong id="prev-end">-</strong></span>
-            </div>
-            <div class="pt-2 flex justify-end">
-              <div class="border border-gray-300 bg-gray-50 rounded px-3 py-1.5 inline-block text-right shadow-sm">
-                <span class="font-semibold text-gray-600 text-xs">Amount Due :</span>
-                <strong id="prev-amount-due" class="text-gray-900 font-bold ml-1 text-sm">Rp 0</strong>
+        <div class="invoice-content">
+          <!-- Header Clean dengan Garis Kuning -->
+          <div class="border-b-4 border-[#F5B850] pb-2 mb-6">
+            <div class="flex justify-between items-start w-full">
+              <div class="flex flex-col items-start">
+                <img src="EXCO.png" alt="EXCO Logo" class="h-24 w-auto object-contain" />
+                <p id="prev-cabang" class="text-xs font-bold text-gray-700 tracking-wider uppercase ml-1 mt-1"></p>
+              </div>
+              
+              <div class="flex flex-col items-end justify-center">
+                <div class="flex items-center gap-3">
+                  <h1 class="text-4xl font-extrabold text-gray-800 tracking-wider leading-none">INVOICE</h1>
+                  <span id="prev-badge-status" class="bg-red-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm">
+                    UNPAID
+                  </span>
+                </div>
+                <div class="bg-gray-50 border-l-4 border-[#F5B850] px-3 py-1 text-xs mt-3">
+                  <span class="font-bold text-gray-700">Invoice Number :</span>
+                  <span id="prev-inv" class="font-semibold text-gray-900 ml-1">INV-2003/EXW/1026</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Tabel Utama Invoice -->
-        <table class="w-full text-xs text-left mb-4 border-collapse">
-          <thead>
-            <tr class="border-b-2 border-gray-300 font-bold uppercase text-gray-700">
-              <th class="py-2">DESCRIPTION</th>
-              <th class="py-2 text-right">RATE</th>
-              <th class="py-2 text-center">DURATION</th>
-              <th class="py-2 text-center">QTY</th>
-              <th class="py-2 text-right">AMMOUNT</th>
-            </tr>
-          </thead>
-          <tbody id="invoice-tbody" class="divide-y divide-gray-200">
-            <!-- Isi tabel di-render dinamis oleh JavaScript -->
-          </tbody>
-        </table>
-
-        <!-- Ringkasan Total & Riwayat Pembayaran -->
-        <div class="flex justify-end mb-6">
-          <div class="w-1/2 text-xs space-y-1 border-t pt-2">
-            <div class="flex justify-between font-bold text-gray-800 pb-1">
-              <span>Total</span>
-              <span id="prev-total">Rp 0</span>
+          <!-- Detail Informasi Pelanggan & Tanggal -->
+          <div class="flex justify-between items-start mb-6 border-b pb-4 text-xs">
+            <div>
+              <p class="font-semibold text-gray-600">Billed To :</p>
+              <span id="prev-nama" class="font-bold text-sm text-gray-800 min-w-[120px] block mt-0.5">-</span>
+              <p id="prev-kontak" class="text-xs text-gray-500 mt-1"></p>
             </div>
-            
-            <!-- Dynamic List Pembayaran -->
-            <div id="prev-pembayaran-list" class="space-y-1 text-gray-600 border-t border-dashed pt-1">
-              <!-- Item DP/Pelunasan dirender via JS -->
-            </div>
-
-            <!-- Highlight Box Sisa Tagihan -->
-            <div class="bg-gray-100 border border-gray-300 rounded p-2 mt-2">
-              <div class="flex justify-between font-bold text-gray-900">
-                <span class="uppercase">SISA TAGIHAN</span>
-                <span id="prev-pelunasan" class="text-sm">Rp 0</span>
+            <div class="text-right space-y-1">
+              <p><span class="font-semibold text-gray-600">Due Date :</span> <span id="prev-due">-</span></p>
+              <p><span class="font-semibold text-gray-600">Booking Date :</span> <span id="prev-booking">-</span></p>
+              <div class="flex justify-end gap-2 pt-1 text-gray-600">
+                <span>Start <strong id="prev-start">-</strong></span>
+                <span>End <strong id="prev-end">-</strong></span>
+              </div>
+              <div class="pt-2 flex justify-end">
+                <div class="border border-gray-300 bg-gray-50 rounded px-3 py-1.5 inline-block text-right shadow-sm">
+                  <span class="font-semibold text-gray-600 text-xs">Amount Due :</span>
+                  <strong id="prev-amount-due" class="text-gray-900 font-bold ml-1 text-sm">Rp 0</strong>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Terbilang & Info Pembayaran -->
-        <div class="text-xs space-y-2 mb-6 bg-gray-50 p-3 rounded border border-gray-200">
-          <p><strong class="font-semibold text-gray-700">TERBILANG :</strong> <span id="prev-terbilang" class="italic font-medium">-</span></p>
-          <p><strong class="font-semibold text-gray-700">PEMBAYARAN :</strong> <span id="prev-info-pembayaran">Mandiri / Aran Ruangan Kerja / 171-05-00004-000</span></p>
-        </div>
+          <!-- Tabel Utama Invoice -->
+          <table class="w-full text-xs text-left mb-4 border-collapse">
+            <thead>
+              <tr class="border-b-2 border-gray-300 font-bold uppercase text-gray-700">
+                <th class="py-2">DESCRIPTION</th>
+                <th class="py-2 text-right">RATE</th>
+                <th class="py-2 text-center">DURATION</th>
+                <th class="py-2 text-center">QTY</th>
+                <th class="py-2 text-right">AMMOUNT</th>
+              </tr>
+            </thead>
+            <tbody id="invoice-tbody" class="divide-y divide-gray-200">
+              <!-- Isi tabel di-render dinamis oleh JavaScript -->
+            </tbody>
+          </table>
 
-        <!-- Catatan Khusus / Note jika ada -->
-        <div id="prev-note-container" class="text-xs mb-6 bg-amber-50 p-3 rounded border border-amber-200 hidden">
-          <p><strong class="font-semibold text-amber-900">CATATAN :</strong> <span id="prev-note-text" class="text-amber-800"></span></p>
-        </div>
+          <!-- Ringkasan Total & Riwayat Pembayaran -->
+          <div class="flex justify-end mb-6">
+            <div class="w-1/2 text-xs space-y-1 border-t pt-2">
+              <div class="flex justify-between font-bold text-gray-800 pb-1">
+                <span>Total</span>
+                <span id="prev-total">Rp 0</span>
+              </div>
+              
+              <!-- Dynamic List Pembayaran -->
+              <div id="prev-pembayaran-list" class="space-y-1 text-gray-600 border-t border-dashed pt-1">
+                <!-- Item DP/Pelunasan dirender via JS -->
+              </div>
 
-        <!-- Ketentuan Pemesanan & Pembatalan serta Fasilitas Office Excowork -->
-        <div class="mt-6 pt-4 border-t border-gray-200 text-[11px] space-y-4">
-          <div class="bg-red-50/60 p-3 rounded-lg border border-red-100">
-            <h4 class="font-bold text-red-900 mb-1.5 uppercase text-[11px] flex items-center gap-1">
-              📌 Ketentuan Pemesanan & Pembatalan :
-            </h4>
-            <ul class="list-disc list-inside text-gray-700 space-y-0.5 ml-1">
-              <li>Pemesanan wajib melakukan DP sesuai ketentuan.</li>
-              <li>Pembatalan di hari H, DP hangus.</li>
-              <li>Jika sudah lunas, refund tidak 100%.</li>
-            </ul>
+              <!-- Highlight Box Sisa Tagihan -->
+              <div class="bg-gray-100 border border-gray-300 rounded p-2 mt-2">
+                <div class="flex justify-between font-bold text-gray-900">
+                  <span class="uppercase">SISA TAGIHAN</span>
+                  <span id="prev-pelunasan" class="text-sm">Rp 0</span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100">
-            <h4 class="font-bold text-emerald-900 mb-2 uppercase text-[11px] flex items-center gap-1">
-              ✨ Fasilitas Office Excowork :
-            </h4>
-            <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-gray-700 font-medium">
-              <div>⚡ Sudah termasuk biaya listrik</div>
-              <div>🕌 Mushola</div>
-              <div>🛜 Koneksi WiFi</div>
-              <div>🚻 Kamar mandi</div>
-              <div>🔌 Ada colokan di setiap meja</div>
-              <div>🅿️ Parkir Luas</div>
-              <div>⚡ Listrik aman (ada genset)</div>
-              <div>🚭 No Smoking Area 🚭</div>
-              <div class="col-span-2">☕ Pantry Self Service (air putih, teh, kopi)</div>
+          <!-- Terbilang & Info Pembayaran -->
+          <div class="text-xs space-y-2 mb-6 bg-gray-50 p-3 rounded border border-gray-200">
+            <p><strong class="font-semibold text-gray-700">TERBILANG :</strong> <span id="prev-terbilang" class="italic font-medium">-</span></p>
+            <p><strong class="font-semibold text-gray-700">PEMBAYARAN :</strong> <span id="prev-info-pembayaran">Mandiri / Aran Ruangan Kerja / 171-05-00004-000</span></p>
+          </div>
+
+          <!-- Catatan Khusus / Note jika ada -->
+          <div id="prev-note-container" class="text-xs mb-6 bg-amber-50 p-3 rounded border border-amber-200 hidden">
+            <p><strong class="font-semibold text-amber-900">CATATAN :</strong> <span id="prev-note-text" class="text-amber-800"></span></p>
+          </div>
+
+          <!-- Ketentuan Pemesanan & Pembatalan serta Fasilitas Office Excowork -->
+          <div class="mt-6 pt-4 border-t border-gray-200 text-[11px] space-y-4">
+            <div class="bg-red-50/60 p-3 rounded-lg border border-red-100">
+              <h4 class="font-bold text-red-900 mb-1.5 uppercase text-[11px] flex items-center gap-1">
+                📌 Ketentuan Pemesanan & Pembatalan :
+              </h4>
+              <ul class="list-disc list-inside text-gray-700 space-y-0.5 ml-1">
+                <li>Pemesanan wajib melakukan DP sesuai ketentuan.</li>
+                <li>Pembatalan di hari H, DP hangus.</li>
+                <li>Jika sudah lunas, refund tidak 100%.</li>
+              </ul>
+            </div>
+
+            <div class="bg-emerald-50/50 p-3 rounded-lg border border-emerald-100">
+              <h4 class="font-bold text-emerald-900 mb-2 uppercase text-[11px] flex items-center gap-1">
+                ✨ Fasilitas Office Excowork :
+              </h4>
+              <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-gray-700 font-medium">
+                <div>⚡ Sudah termasuk biaya listrik</div>
+                <div>🕌 Mushola</div>
+                <div>🛜 Koneksi WiFi</div>
+                <div>🚻 Kamar mandi</div>
+                <div>🔌 Ada colokan di setiap meja</div>
+                <div>🅿️ Parkir Luas</div>
+                <div>⚡ Listrik aman (ada genset)</div>
+                <div>🚭 No Smoking Area 🚭</div>
+                <div class="col-span-2">☕ Pantry Self Service (air putih, teh, kopi)</div>
+              </div>
             </div>
           </div>
         </div>
@@ -746,15 +759,11 @@
 
       // Status & Pembayaran
       const noUrut = document.getElementById('input-no-urut').value.trim() || "2003";
-      const tipeAwal = document.getElementById('select-tipe-awal').value;
       const dpVal = parseFloat(document.getElementById('input-dp').value) || 0;
       const pelunasan1Val = parseFloat(document.getElementById('input-pelunasan1').value) || 0;
       const pelunasan2Val = parseFloat(document.getElementById('input-pelunasan2').value) || 0;
       const pelunasan3Val = parseFloat(document.getElementById('input-pelunasan3').value) || 0;
       const metodeBayar = document.getElementById('select-metode-bayar').value;
-
-      // Label Tipe Awal Form
-      document.getElementById('label-nominal-awal').innerText = tipeAwal === 'Lunas' ? 'Pembayaran Lunas (Rp)' : 'Pembayaran DP (Rp)';
 
       // Catatan
       const noteVal = document.getElementById('input-note').value.trim();
@@ -902,10 +911,9 @@
           </div>
         `;
       } else {
-        const labelPembayaranAwal = tipeAwal === 'Lunas' ? 'Telah Dibayarkan' : 'DP';
         bayarListContainer.innerHTML += `
           <div class="flex justify-between">
-            <span>${labelPembayaranAwal}</span>
+            <span>DP</span>
             <span>${formatRupiah(dpVal)}</span>
           </div>
         `;
