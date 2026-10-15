@@ -362,18 +362,21 @@
 
         <!-- Ringkasan Total Pembayaran -->
         <div class="flex justify-end mb-6">
-          <div class="w-1/2 text-xs space-y-1 border-t pt-2">
-            <div class="flex justify-between font-bold">
+          <div class="w-1/2 text-xs space-y-1.5 border-t pt-2">
+            <div class="flex justify-between font-bold text-gray-800">
               <span>Total</span>
               <span id="prev-total">Rp 0</span>
             </div>
             <div class="flex justify-between text-gray-600">
-              <span>DP</span>
+              <span id="prev-label-bayar">DP</span>
               <span id="prev-dp-val">Rp 0</span>
             </div>
-            <div class="flex justify-between font-bold text-gray-800 border-t pt-1">
-              <span>PELUNASAN</span>
-              <span id="prev-pelunasan">Rp 0</span>
+            <!-- Highlight Box Sisa Tagihan -->
+            <div class="bg-gray-100 border border-gray-300 rounded p-2 mt-1">
+              <div class="flex justify-between font-bold text-gray-900">
+                <span class="uppercase">SISA TAGIHAN</span>
+                <span id="prev-pelunasan" class="text-sm">Rp 0</span>
+              </div>
             </div>
           </div>
         </div>
@@ -826,24 +829,32 @@
       const selectStatusElem = document.getElementById('select-status-bayar');
       selectStatusElem.value = statusPembayaran;
 
-      // Update Badge Status Pembayaran di Preview Invoice
+      // Update Badge Status Pembayaran & Label Ringkasan
       const badgeElem = document.getElementById('prev-badge-status');
+      const labelBayarElem = document.getElementById('prev-label-bayar');
+      const valBayarElem = document.getElementById('prev-dp-val');
+
       if (statusPembayaran === 'Paid') {
         badgeElem.innerText = 'PAID';
         badgeElem.className = 'bg-[#00FF55] text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+        labelBayarElem.innerText = 'Telah Dibayarkan';
+        valBayarElem.innerText = formatRupiah(totalBayar);
       } else if (statusPembayaran === 'DP') {
         badgeElem.innerText = 'DP';
         badgeElem.className = 'bg-amber-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+        labelBayarElem.innerText = 'DP';
+        valBayarElem.innerText = formatRupiah(dpVal);
       } else {
         badgeElem.innerText = 'UNPAID';
         badgeElem.className = 'bg-red-500 text-white font-bold text-sm px-4 py-1.5 rounded uppercase tracking-wide shadow-sm';
+        labelBayarElem.innerText = 'DP';
+        valBayarElem.innerText = formatRupiah(0);
       }
 
-      // Hitung Sisa Pelunasan / Amount Due
+      // Hitung Sisa Pelunasan / Sisa Tagihan
       const totalSisa = Math.max(0, grandTotal - totalBayar);
 
       document.getElementById('prev-total').innerText = formatRupiah(grandTotal);
-      document.getElementById('prev-dp-val').innerText = formatRupiah(dpVal);
       document.getElementById('prev-pelunasan').innerText = formatRupiah(totalSisa);
       document.getElementById('prev-amount-due').innerText = formatRupiah(totalSisa);
 
